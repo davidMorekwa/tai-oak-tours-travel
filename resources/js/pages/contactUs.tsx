@@ -2,16 +2,20 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Mail, MapPin, MapPlus, Phone } from 'lucide-react'; // Icons for contact details
 // Import useInView and cn
 import { cn } from '@/lib/utils';
 import { useInView } from 'react-intersection-observer';
+import { SharedData } from '@/types';
+import PublicNavbar from '@/components/public-navbar';
 
 // Define logo path
 const logoUrl = '/storage/image_assets/logo.png'; // Adjust path if needed
 
 export default function ContactUs() {
+    const { props, component } = usePage<SharedData>();
+    const logoUrl = '/storage/image_assets/logo.jpg';
     // Setup useInView hooks for each section with staggering delays
     const animationOptions = { triggerOnce: true, threshold: 0.1 };
     const { ref: heroRef, inView: heroInView } = useInView(animationOptions);
@@ -33,28 +37,7 @@ export default function ContactUs() {
             {/* Main Content Area */}
             <div className="flex min-h-screen flex-col items-center bg-[#fff7d6] text-[#1b1b18]">
                 {/* --- Navigation Header --- */}
-                <header className="sticky top-0 z-50 flex w-full justify-center bg-[#fff7d6] py-4 shadow-sm">
-                    <nav className="flex w-11/12 max-w-6xl items-center justify-between gap-4 rounded-full border bg-[#152253] px-4 py-2">
-                        {/* Navigation Links Group */}
-                        <div className="flex items-center justify-center gap-3 md:gap-4">
-                            <Link href={route('home')} className="rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10">
-                                Home
-                            </Link>
-                            <Link href={route('about')} className="rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10">
-                                About Us
-                            </Link>
-                            {/* Highlight Contact Us */}
-                            <span className="rounded-sm bg-white/10 px-3 py-1.5 text-sm font-semibold text-white">Contact Us</span>
-                            <Link href={route('contact')} className="hidden rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10 md:inline-block">
-                                Hotels
-                            </Link>
-                            <Link href={route('home')} className="hidden rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10 md:inline-block">
-                                Destinations
-                            </Link>
-                        </div>
-                        <div className="w-10 shrink-0"></div> {/* Invisible spacer */}
-                    </nav>
-                </header>
+                <PublicNavbar />
                 {/* --- End Navigation Header --- */}
 
                 {/* Content Sections Wrapper */}

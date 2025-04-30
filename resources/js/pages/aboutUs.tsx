@@ -2,11 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { BookOpen, Heart, Mail, MapPlus, Phone, ShieldCheck, Sparkles, Target, Users } from 'lucide-react';
 // 1. Import useInView and cn
 import { cn } from '@/lib/utils';
 import { useInView } from 'react-intersection-observer';
+import { SharedData } from '@/types';
+import PublicNavbar from '@/components/public-navbar';
 
 // --- Placeholder Team Data ---
 const teamMembers = [
@@ -34,6 +36,11 @@ const teamMembers = [
 
 export default function AboutUs() {
     // 2. Setup useInView hooks for each section with staggering delays
+
+    const { props, component } = usePage<SharedData>();
+    const logoUrl = '/storage/image_assets/logo.jpg';
+
+    
     const animationOptions = { triggerOnce: true, threshold: 0.1 };
     const { ref: heroRef, inView: heroInView } = useInView(animationOptions);
     const { ref: storyRef, inView: storyInView } = useInView(animationOptions);
@@ -45,30 +52,11 @@ export default function AboutUs() {
     return (
         <>
             <Head title="About Tai-Oak Tours & Travel" />
-
             {/* Main Content Area */}
             <div className="flex min-h-screen flex-col items-center bg-[#fff7d6] text-[#1b1b18]">
                 {/* --- Navigation Header --- */}
-                <header className="sticky top-0 z-50 flex w-full justify-center bg-[#fff7d6] py-4 shadow-sm">
-                    {/* ... nav content ... */}
-                    <nav className="flex w-11/12 max-w-4xl items-center justify-around gap-4 rounded-full border bg-[#152238] px-4 py-2">
-                        <Link href={route('home')} className="rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10">
-                            Home
-                        </Link>
-                        <span className="rounded-sm bg-white/10 px-3 py-1.5 text-sm font-semibold text-white">About Us</span>
-                        <Link href={route('contact')} className="rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10">
-                            Contact Us
-                        </Link>
-                        <Link href={route('home')} className="rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10">
-                            Hotels
-                        </Link>
-                        <Link href={route('home')} className="rounded-sm px-3 py-1.5 text-sm text-[#EDEDEC] hover:bg-white/10">
-                            Destinations
-                        </Link>
-                    </nav>
-                </header>
+                <PublicNavbar />
                 {/* --- End Navigation Header --- */}
-
                 {/* Content Sections Wrapper */}
                 <div className="w-full max-w-7xl px-4 py-6 md:px-6 lg:px-8 lg:py-8">
                     {/* Hero Section - ANIMATED */}
@@ -82,9 +70,9 @@ export default function AboutUs() {
                     >
                         <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">Discover Kenya With Passionate Locals</h1>
                         <p className="mx-auto max-w-3xl text-lg text-gray-300">
-                            Welcome to Tai-Oak Tours & Travel, your trusted partner for authentic and unforgettable adventures across the heart of Kenya.
-                            We're more than just a travel agency; we're storytellers, explorers, and proud Kenyans eager to share the magic of our
-                            homeland with you.
+                            Welcome to Tai-Oak Tours & Travel, your trusted partner for authentic and unforgettable adventures across the heart of
+                            Kenya. We're more than just a travel agency; we're storytellers, explorers, and proud Kenyans eager to share the magic of
+                            our homeland with you.
                         </p>
                     </section>
 
@@ -93,7 +81,7 @@ export default function AboutUs() {
                         ref={storyRef}
                         className={cn(
                             'mb-8 rounded-lg bg-white p-6 shadow-md md:p-8',
-                            'opacity-0 transition-opacity duration-1000 ease-in-out delay-100', // Added delay
+                            'opacity-0 transition-opacity delay-100 duration-1000 ease-in-out', // Added delay
                             storyInView ? 'opacity-100' : '',
                         )}
                     >
@@ -105,12 +93,13 @@ export default function AboutUs() {
                                 </h2>
                                 <p className="mb-4 text-gray-700">
                                     Founded by lifelong friends with a shared passion for Kenya's incredible landscapes and diverse cultures, Tai-Oak
-                                    Tours & Travel was born from a desire to offer more than just standard tours. We wanted to create genuine connections,
-                                    showcase hidden gems, and provide experiences that leave lasting memories.
+                                    Tours & Travel was born from a desire to offer more than just standard tours. We wanted to create genuine
+                                    connections, showcase hidden gems, and provide experiences that leave lasting memories.
                                 </p>
                                 <p className="text-gray-700">
-                                    From humble beginnings exploring our local surroundings, we've grown into a dedicated team committed to sustainable
-                                    tourism and delivering exceptional service, ensuring every traveler experiences the true spirit of Kenya.
+                                    From humble beginnings exploring our local surroundings, we've grown into a dedicated team committed to
+                                    sustainable tourism and delivering exceptional service, ensuring every traveler experiences the true spirit of
+                                    Kenya.
                                 </p>
                             </div>
                             <div className="mt-6 md:mt-0">
@@ -128,7 +117,7 @@ export default function AboutUs() {
                         ref={teamRef}
                         className={cn(
                             'mb-8 rounded-lg bg-[#f5e7c5] p-6 shadow-md md:p-8',
-                            'opacity-0 transition-opacity duration-1000 ease-in-out delay-200', // Added delay
+                            'opacity-0 transition-opacity delay-200 duration-1000 ease-in-out', // Added delay
                             teamInView ? 'opacity-100' : '',
                         )}
                     >
@@ -160,7 +149,7 @@ export default function AboutUs() {
                         ref={missionVisionRef}
                         className={cn(
                             'mb-8 grid gap-8 rounded-lg bg-white p-6 shadow-md md:grid-cols-2 md:p-8', // Changed bg back
-                            'opacity-0 transition-opacity duration-1000 ease-in-out delay-300', // Added delay
+                            'opacity-0 transition-opacity delay-300 duration-1000 ease-in-out', // Added delay
                             missionVisionInView ? 'opacity-100' : '',
                         )}
                     >
@@ -170,8 +159,8 @@ export default function AboutUs() {
                                 Our Mission
                             </h3>
                             <p className="text-gray-700">
-                                To craft personalized, authentic, and sustainable travel experiences in Kenya that connect our guests with the beauty of
-                                our nature, the richness of our culture, and the warmth of our people.
+                                To craft personalized, authentic, and sustainable travel experiences in Kenya that connect our guests with the beauty
+                                of our nature, the richness of our culture, and the warmth of our people.
                             </p>
                         </div>
                         <div className="text-center md:text-left">
@@ -191,7 +180,7 @@ export default function AboutUs() {
                         ref={valuesRef}
                         className={cn(
                             'mb-8 rounded-lg bg-[#f5e7c5] p-6 shadow-md md:p-8', // Changed bg back
-                            'opacity-0 transition-opacity duration-1000 ease-in-out delay-400', // Added delay
+                            'opacity-0 transition-opacity delay-400 duration-1000 ease-in-out', // Added delay
                             valuesInView ? 'opacity-100' : '',
                         )}
                     >
@@ -241,13 +230,14 @@ export default function AboutUs() {
                         ref={ctaRef}
                         className={cn(
                             'mb-8 rounded-lg bg-[#152253] p-8 text-center text-white shadow-lg',
-                            'opacity-0 transition-opacity duration-1000 ease-in-out delay-500', // Added delay
+                            'opacity-0 transition-opacity delay-500 duration-1000 ease-in-out', // Added delay
                             ctaInView ? 'opacity-100' : '',
                         )}
                     >
                         <h2 className="mb-4 text-3xl font-bold">Ready to Start Your Kenyan Adventure?</h2>
                         <p className="mx-auto mb-6 max-w-2xl text-gray-300">
-                            Let our local experts craft the perfect itinerary for you. Explore our packages or get in touch to discuss your dream trip.
+                            Let our local experts craft the perfect itinerary for you. Explore our packages or get in touch to discuss your dream
+                            trip.
                         </p>
                         <div className="flex flex-col justify-center gap-4 sm:flex-row">
                             <Link href="#">
@@ -272,7 +262,8 @@ export default function AboutUs() {
                         <div className="md:col-span-1 lg:col-span-1">
                             <h4 className="mb-3 font-semibold text-white">Tai-Oak Tours & Travel</h4>
                             <p className="text-sm leading-relaxed">
-                                Your gateway to unforgettable Kenyan adventures. We offer personalized safaris, cultural experiences, and beach holidays.
+                                Your gateway to unforgettable Kenyan adventures. We offer personalized safaris, cultural experiences, and beach
+                                holidays.
                             </p>
                         </div>
                         {/* Company Links */}
