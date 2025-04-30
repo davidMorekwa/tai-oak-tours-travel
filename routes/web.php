@@ -6,6 +6,12 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
+Route::get('/about', function () {
+    return Inertia::render('aboutUs');
+})->name('about');
+Route::get('/contact', function () {
+    return Inertia::render('contactUs');
+})->name('contact');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
