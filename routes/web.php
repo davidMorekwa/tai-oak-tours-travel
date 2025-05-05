@@ -12,9 +12,7 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return Inertia::render('contactUs');
 })->name('contact');
-Route::get('/tours', function (){
-    return Inertia::render('tours');
-})->name('tours');
+Route::get('/tours', [ToursController::class, 'index'])->name('tours');
 Route::get('/tour-details', function (){
     return Inertia::render('tourDetails');
 })->name('details');
