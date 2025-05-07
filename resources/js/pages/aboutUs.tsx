@@ -241,8 +241,8 @@ export default function AboutUs() {
                             trip.
                         </p>
                         <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                            <Link href="#">
-                                <Button variant={'default'} size={'lg'} className="w-full sm:w-auto">
+                            <Link href={route('tours')} className='hover:cursor-pointer'>
+                                <Button variant={'default'} size={'lg'} className="w-full sm:w-auto hover:cursor-pointer hover:scale-105">
                                     View Our Packages
                                 </Button>
                             </Link>

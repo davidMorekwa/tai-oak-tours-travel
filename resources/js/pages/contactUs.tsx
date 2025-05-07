@@ -78,7 +78,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Our Office</h3>
                                             <address className="not-italic text-gray-600">
-                                                123 Safari Lane, Westlands
+                                                Muthaiga Square, Thika Road
                                                 <br />
                                                 Nairobi, Kenya
                                             </address>
@@ -89,7 +89,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Phone</h3>
                                             <a href="tel:+254700123456" className="text-gray-600 hover:text-[#007562] hover:underline">
-                                                +254 700 123 456
+                                                +254 742 087 703
                                             </a>
                                             <p className="text-sm text-gray-500">(Mon-Fri, 9am - 5pm EAT)</p>
                                         </div>
@@ -99,7 +99,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Email</h3>
                                             <a href="mailto:info@taioaktours.co.ke" className="text-gray-600 hover:text-[#007562] hover:underline">
-                                                info@taioaktours.co.ke
+                                                sikinyicharity@gmail.com
                                             </a>
                                             <p className="text-sm text-gray-500">We typically respond within 24 hours</p>
                                         </div>
@@ -166,7 +166,7 @@ export default function ContactUs() {
                         <div className="overflow-hidden rounded-lg shadow-md">
                             {/* Replace with your actual Google Maps embed code */}
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127641.17934904937!2d36.76402365820312!3d-1.3030739999999907!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1678886456789!5m2!1sen!2sus" // Placeholder URL
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.850881570899!2d36.84701397496561!3d-1.261930998682896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f17!3m3!1m2!1s0x182f170978780797%3A0x7209355894759bac!2sMuthaiga%20Square!5e0!3m2!1sen!2ske!4v1716218900000!5m2!1sen!2ske"
                                 width="100%"
                                 height="450"
                                 style={{ border: 0 }}

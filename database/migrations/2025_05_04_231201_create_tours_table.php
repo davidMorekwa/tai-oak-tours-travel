@@ -16,8 +16,13 @@ return new class extends Migration {
             $table->integer('duration_days');
             $table->string('image');
             $table->text('description')->nullable();
+            $table->text('overview')->nullable();
+            $table->text('highlights')->nullable();
+            $table->string('country');
+            $table->boolean('is_featured')->default(false);
             $table->decimal('low_season_price', 10, 2)->nullable();
             $table->decimal('high_season_price', 10, 2)->nullable();
+            $table->decimal('rating');
             $table->timestamps();
         });
     }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Itinerary;
+use App\Models\Tour;
 use App\Models\tours;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,6 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        tours::factory(10)->create();
+        Tour::factory(5)->create();
+        Itinerary::factory(15)->create();
     }
 }

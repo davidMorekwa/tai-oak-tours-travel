@@ -29,11 +29,11 @@ export default function PublicNavbar() {
     const logoUrl = '/storage/image_assets/logo.jpg';
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-[#fff7d6] shadow-sm">
+        <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
                 {/* Logo */}
                 <Link href={route('home')} className="shrink-0">
-                    <img src={logoUrl} alt="Tai-Oak Tours & Travel Logo" className="h-10 w-auto md:h-12" />
+                    <img src={logoUrl} alt="Tai-Oak Tours & Travel Logo" className="h-24 w-auto md:h-12" />
                 </Link>
 
                 {/* Right side container (Nav + Social + Mobile Trigger) */}

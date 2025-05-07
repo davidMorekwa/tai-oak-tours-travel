@@ -41,3 +41,24 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+// TRAVEL INFOMATION TYPES
+export interface TourPackage {
+    id: number,
+    title: string,
+    image: string,
+    duration_days: string,
+    description: string,
+    is_featured: boolean,
+    low_season_price: number,
+    high_season_price: number,
+    rating: number,
+    highlights: string
+}
+
+export interface TourItinerary {
+    id: number,
+    tour_id: number,
+    day_number: number,
+    title: string,
+    description: string,
+}
