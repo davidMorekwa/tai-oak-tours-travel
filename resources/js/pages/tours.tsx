@@ -1,100 +1,79 @@
 // /Users/dave/Code/travel-agency/resources/js/pages/Tours.tsx
 
+import PublicFooter from '@/components/public-footer';
 import PublicNavbar from '@/components/public-navbar';
 import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input'; // Keep for Footer
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"; // Import Select components
+import { Label } from '@/components/ui/label'; // Import Label for filter
 import { cn } from '@/lib/utils';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { Mail, MapPlus, Phone, Star } from 'lucide-react'; // Added Star for potential rating
+import { PaginatedData, TourPackage, type SharedData } from '@/types'; // Import PaginatedData
+import { Head, Link, router, usePage } from '@inertiajs/react'; // Import router
+import { Mail, MapPlus, Phone, Search, Star, X as XIcon } from 'lucide-react'; // Added Search and XIcon
+import React, { Key, useEffect, useState } from 'react'; // Import useState and useEffect
 import { useInView } from 'react-intersection-observer';
 
-// --- Placeholder Tour Package Data ---
-// TODO: Replace with data fetched from your backend
-const tourPackages = [
-    {
-        id: 1,
-        title: 'Maasai Mara Classic Safari',
-        imageUrl: '/storage/image_assets/1.jpg', // Replace with actual image
-        duration: '4 Days / 3 Nights',
-        highlights: ['Big Five Game Drives', 'Mara River Crossing (Seasonal)', 'Maasai Village Visit (Optional)'],
-        description: 'Immerse yourself in the legendary Maasai Mara, renowned for its incredible wildlife density and the Great Migration.',
-        price: 850,
-        rating: 4.8, // Example rating
-        detailsLink: '#', // Replace with actual route later: route('tours.show', { tour: 1 })
-    },
-    {
-        id: 2,
-        title: 'Amboseli Elephant Spectacle',
-        imageUrl: '/storage/image_assets/pexels-pixabay-59989.jpg', // Replace with actual image
-        duration: '3 Days / 2 Nights',
-        highlights: ['Views of Mt. Kilimanjaro', 'Large Elephant Herds', 'Observation Hill'],
-        description: 'Get up close with gentle giants against the iconic backdrop of Africa\'s highest peak in Amboseli National Park.',
-        price: 650,
-        rating: 4.7,
-        detailsLink: '#', // Replace with actual route later
-    },
-    {
-        id: 3,
-        title: 'Diani Beach Paradise Escape',
-        imageUrl: '/storage/image_assets/image3.jpg', // Replace with actual image
-        duration: '5 Days / 4 Nights',
-        highlights: ['White Sand Beaches', 'Snorkeling/Diving', 'Coastal Relaxation', 'Colobus Conservation'],
-        description: 'Unwind on the award-winning Diani Beach. Perfect for post-safari relaxation or a standalone beach getaway.',
-        price: 500,
-        rating: 4.9,
-        detailsLink: '#', // Replace with actual route later
-    },
-    {
-        id: 4,
-        title: 'Lake Nakuru & Rift Valley Explorer',
-        imageUrl: '/storage/image_assets/image2.jpg', // Replace with actual image
-        duration: '3 Days / 2 Nights',
-        highlights: ['Flamingo Flocks (Seasonal)', 'Rhino Sanctuary', 'Baboon Cliff', 'Optional Hell\'s Gate'],
-        description: 'Discover the unique beauty of the Great Rift Valley, from vibrant birdlife to endangered rhinos.',
-        price: 550,
-        rating: 4.6,
-        detailsLink: '#', // Replace with actual route later
-    },
-    {
-        id: 5,
-        title: 'Tsavo East & West Adventure',
-        imageUrl: '/storage/image_assets/wildlife.jpg', // Replace with actual image
-        duration: '4 Days / 3 Nights',
-        highlights: ['Mzima Springs', 'Shetani Lava Flows', '"Red Elephants"', 'Lugard Falls'],
-        description: 'Explore the vast wilderness of Tsavo, Kenya\'s largest national park, known for its diverse landscapes and unique wildlife.',
-        price: 750,
-        rating: 4.5,
-        detailsLink: '#', // Replace with actual route later
-    },
-    {
-        id: 6,
-        title: 'Mount Kenya Trekking Challenge',
-        imageUrl: '/storage/image_assets/Mount_Kenya.jpg', // Replace with actual image
-        duration: '5 Days / 4 Nights',
-        highlights: ['Point Lenana Summit', 'Alpine Scenery', 'Diverse Flora/Fauna', 'Experienced Guides'],
-        description: 'Embark on an exhilarating trek up Mount Kenya, Africa\'s second-highest peak, through stunning landscapes.',
-        price: 1100,
-        rating: 4.8,
-        detailsLink: '#', // Replace with actual route later
-    },
-    // Add more packages as needed
-];
-// --- End Placeholder Data ---
+// Define the props structure including the paginated tourPackages
+interface ToursPageProps extends SharedData {
+    tourPackages: PaginatedData<TourPackage>; // Use the PaginatedData type
+    filters: { // Add filters prop
+        search: string | null;
+        country: string | null;
+        availableCountries: string[]; // For the dropdown options
+    };
+}
 
 export default function Tours() {
-    const { props, component } = usePage<SharedData>();
+    const { props } = usePage<ToursPageProps>(); // Use the specific props interface
     const logoUrl = '/storage/image_assets/logo.jpg'; // Ensure correct path
+
+    const [searchFilters, setSearchFilters] = useState({
+        search: props.filters.search || '',
+        country: props.filters.country || '',
+    });
 
     // Animation hooks
     const animationOptions = { triggerOnce: true, threshold: 0.1 };
     const { ref: heroRef, inView: heroInView } = useInView(animationOptions);
     const { ref: packagesRef, inView: packagesInView } = useInView(animationOptions);
+    const { ref: paginationRef, inView: paginationInView } = useInView(animationOptions); // For pagination animation
+
+    console.log('Tour Packages Data:', props.tourPackages);
+    console.log('Current Filters:', props.filters);
+
+    const handleSearch = (e?: React.FormEvent<HTMLFormElement>) => {
+        if (e) e.preventDefault();
+        const queryParams: Record<string, any> = { page: 1 };
+        if (searchFilters.search) queryParams.search = searchFilters.search;
+        if (searchFilters.country) queryParams.country = searchFilters.country;
+
+        router.get(route('tours'), queryParams, { // Use 'tours' if that's your route name
+            preserveState: true, // Preserves component state (like searchTerm input)
+            replace: true,       // Replaces history entry instead of pushing
+        });
+    };
+
+    const clearSearch = () => {
+        setSearchFilters({ search: '', country: '' });
+        // Ensure 'tours.index' is the correct route name, or use 'tours' if simpler
+        router.get(route('tours'), { page: 1 }, { // Clear all filters and reset to page 1
+            preserveState: true,
+            replace: true,
+        });
+    };
 
     return (
         <>
             <Head title="Our Tour Packages - Tai-Oak Tours & Travel" />
+
+
 
             {/* Main container */}
             <div className="flex min-h-screen flex-col items-center bg-[#fff7d6] text-[#1b1b18]">
@@ -132,117 +111,181 @@ export default function Tours() {
                         )}
                     >
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            {/* Optional: Add Filters/Sorting controls here later */}
-                            {/* <div className="mb-8 flex justify-end"> ... Filters ... </div> */}
-
-                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-                                {tourPackages.map((pkg) => (
-                                    <Card
-                                        key={pkg.id}
-                                        className="flex flex-col overflow-hidden pt-0 border-none bg-[#f5e7c5] shadow-md transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl" // Cream background for cards
-                                    >
+                            {/* --- Filter Bar --- */}
+                            <div className="mb-10 rounded-lg bg-[#f5e7c5] p-4 sm:p-6 shadow-md">
+                                <form onSubmit={handleSearch} className="grid grid-cols-1 gap-4 md:grid-cols-3 md:items-end">
+                                    {/* Search Term Input */}
+                                    <div className="md:col-span-1">
+                                        <Label htmlFor="search-tours" className="block text-sm font-medium text-gray-700 mb-1">
+                                            Keyword
+                                        </Label>
                                         <div className="relative">
-                                            <img src={pkg.imageUrl} alt={pkg.title} className="h-60 w-full object-cover" /> {/* Fixed height image */}
-                                            {/* Optional: Overlay for Price/Duration */}
-                                            <div className="absolute bottom-0 left-0 bg-black/60 px-3 py-1 text-sm font-semibold text-white">
-                                                {pkg.duration}
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </div>
-                                            {pkg.rating && (
-                                                <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-yellow-400 px-2 py-0.5 text-xs font-bold text-black">
-                                                    <Star className="h-3 w-3 fill-black" />
-                                                    {pkg.rating.toFixed(1)}
-                                                </div>
+                                            <Input
+                                                type="text"
+                                                id="search-tours"
+                                                placeholder="e.g., Mara, Safari, Beach..."
+                                                value={searchFilters.search}
+                                                onChange={(e) => setSearchFilters(prev => ({ ...prev, search: e.target.value }))}
+                                                className="w-full rounded-md border-gray-300 bg-white py-2 pl-10 pr-10 shadow-sm focus:border-[#152253] focus:ring-[#152253] sm:text-sm" // Adjusted padding and styling
+                                            />
+                                            {searchFilters.search && (
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                                                    onClick={() => {
+                                                        setSearchFilters(prev => ({ ...prev, search: '' }));
+                                                        // Optionally trigger search immediately on clear, or wait for main search button
+                                                        // handleSearch(); // if you want immediate re-filter
+                                                    }}
+                                                    aria-label="Clear search"
+                                                >
+                                                    <XIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                                </Button>
                                             )}
                                         </div>
-                                        <CardHeader className="pt-4 pb-2">
-                                            <CardTitle className="text-lg font-semibold leading-tight">{pkg.title}</CardTitle>
-                                        </CardHeader>
-                                        <CardDescription className="flex-grow px-6 pb-4 text-sm text-gray-700">
-                                            <p className="mb-2 line-clamp-3">{pkg.description}</p> {/* Limit description lines */}
-                                            {/* Optional: Display highlights */}
-                                            <ul className="mt-2 list-disc list-inside text-xs text-gray-600">
-                                                {pkg.highlights.slice(0, 2).map(hl => <li key={hl}>{hl}</li>)}
-                                                {pkg.highlights.length > 2 && <li>...</li>}
-                                            </ul>
-                                        </CardDescription>
-                                        <CardFooter className="mt-auto flex items-center justify-between bg-[#e6d9b9] px-6 py-3"> {/* Slightly darker footer */}
-                                            <p className="text-lg font-semibold text-[#152253]">
-                                                ${pkg.price} <span className="text-sm font-normal text-gray-600">/ person</span>
-                                            </p>
-                                            <Link href={pkg.detailsLink}>
-                                                <Button variant={'default'} size="sm">
-                                                    View Details
-                                                </Button>
-                                            </Link>
-                                        </CardFooter>
-                                    </Card>
-                                ))}
+                                    </div>
+                                    {/* Country Input */}
+                                    <div className="md:col-span-1">
+                                        <Label htmlFor="country-filter" className="block text-sm font-medium text-gray-700 mb-1">
+                                            Country
+                                        </Label>
+                                        <Select
+                                            value={searchFilters.country || ''}
+                                            onValueChange={(value) => setSearchFilters(prev => ({ ...prev, country: value === 'all' ? '' : value }))}
+                                        >
+                                            <SelectTrigger id="country-filter" className="w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-[#152253] focus:ring-[#152253] sm:text-sm">
+                                                <SelectValue placeholder="Select a country" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="all">All Countries</SelectItem>
+                                                {props.availableCountries.map((countryName) => (
+                                                    <SelectItem key={countryName} value={countryName}>
+                                                        {countryName}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    {/* Submit Button */}
+                                    <div className="md:col-span-1 flex items-end space-x-2">
+                                        <Button type="submit" variant="default" className="w-full flex-grow px-6 py-2">
+                                            <Search className="mr-2 h-4 w-4" />
+                                            Apply Filters
+                                        </Button>
+                                        {(searchFilters.search || searchFilters.country) && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={clearSearch}
+                                                className="w-auto px-3 py-2"
+                                                aria-label="Clear all filters"
+                                            >
+                                                <XIcon className="h-4 w-4 text-gray-500 hover:text-gray-600" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                </form>
                             </div>
 
-                            {/* Optional: Add Pagination controls here later */}
-                            {/* <div className="mt-12 text-center"> ... Pagination ... </div> */}
+                            {props.tourPackages.data.length > 0 ? (
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+                                    {props.tourPackages.data.map((pkg:TourPackage) => ( // Access items via props.tourPackages.data
+                                        <Card
+                                            key={pkg.id}
+                                            className="flex flex-col overflow-hidden pt-0 border-none bg-[#f5e7c5] shadow-md transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl" // Cream background for cards
+                                        >
+                                            <div className="relative">
+                                                <img src={pkg.image} alt={pkg.title} className="h-60 w-full object-cover" /> {/* Fixed height image */}
+                                                {/* Optional: Overlay for Price/Duration - corrected class for rounded corner */}
+                                                <div className="absolute bottom-0 left-0 bg-black/60 px-3 py-1 text-sm font-semibold text-white">
+                                                    {pkg.duration_days} days
+                                                </div>
+                                                {pkg.rating && (
+                                                    <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-yellow-400 px-2 py-0.5 text-xs font-bold text-black">
+                                                        <Star className="h-3 w-3 fill-black" />
+                                                        {pkg.rating.toPrecision(2)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <CardHeader className="pt-4 pb-2">
+                                                <CardTitle className="text-lg font-semibold leading-tight">{pkg.title}</CardTitle>
+                                            </CardHeader>
+                                            <CardDescription className="flex-grow px-6 pb-4 text-sm text-gray-700">
+                                                <p className="mb-2 line-clamp-3">{pkg.description}</p> {/* Limit description lines */}
+                                            </CardDescription>
+                                            <CardFooter className="mt-auto flex items-center justify-between bg-[#e6d9b9] px-6 py-3"> {/* Slightly darker footer */}
+                                            <div className="text-sm text-[#152253]">
+                                                    <p className="font-semibold">
+                                                        Low: ${pkg.low_season_price.toLocaleString()}
+                                                    </p>
+                                                    <p className="font-semibold">
+                                                        Peak: ${pkg.high_season_price.toLocaleString()}
+                                                    </p>
+                                                </div>
+                                                <Link href={route('details', pkg.id)}> {/* TODO: Route to the tourpackage infomation */}
+                                                    <Button variant={'default'} size="sm">
+                                                        View Details
+                                                    </Button>
+                                                </Link>
+                                            </CardFooter>
+                                        </Card>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="py-12 text-center">
+                                    <Search className="mx-auto h-12 w-12 text-gray-400" />
+                                    <h3 className="mt-2 text-xl font-semibold text-gray-900">No Tours Found</h3>
+                                    <p className="mt-1 text-sm text-gray-500">
+                                        We couldn't find any tours matching your current filters. Try adjusting your search or country selection.
+                                    </p>
+                                    { (searchFilters.search || searchFilters.country) &&
+                                        <Button variant="link" onClick={clearSearch} className="mt-4 text-[#152253]">Clear all filters</Button>
+                                    }
+                                </div>
+                            )}
+
+                            {/* --- Pagination Links --- */}
+                            {props.tourPackages.links.length > 3 && ( // Only show pagination if there's more than one page (prev, current, next for simple, or more for full)
+                                <div
+                                    ref={paginationRef}
+                                    className={cn(
+                                        'mt-12 flex justify-center space-x-1',
+                                        'opacity-0 transition-opacity delay-200 duration-1000 ease-in-out',
+                                        paginationInView ? 'opacity-100' : ''
+                                    )}
+                                >
+                                    {props.tourPackages.links.map((link: { url: any; active: any; label: any; }, index: Key | null | undefined) => (
+                                        <Link
+                                            key={index}
+                                            href={link.url || '#'} // Use link.url, provide fallback if null
+                                            className={cn(
+                                                'px-4 py-2 border rounded-md text-sm font-medium transition-colors',
+                                                link.active ? 'bg-[#152253] text-white border-[#152253]' : 'bg-white text-gray-700 hover:bg-gray-100 border-gray-300',
+                                                !link.url ? 'text-gray-400 cursor-not-allowed bg-gray-50' : '' // Disabled state
+                                            )}
+                                            // Preserve scroll position on navigation
+                                            preserveScroll
+                                            // Use dangerouslySetInnerHTML for labels like "&laquo; Previous"
+                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                            {/* Pagination Info */}
+                            <div className="mt-4 text-center text-sm text-gray-600">
+                                Showing {props.tourPackages.from} to {props.tourPackages.to} of {props.tourPackages.total} results
+                            </div>
                         </div>
                     </section>
                 </div>
 
                 {/* --- Footer --- */}
-                <footer className="w-full bg-[#152253] py-10 text-sm text-[#9a9a9a]"> {/* Removed mt-auto as flex-1 on content wrapper handles it */}
-                    {/* ... Footer content remains the same ... */}
-                     <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 md:grid-cols-3 lg:grid-cols-5">
-                        {/* Company Info */}
-                        <div className="md:col-span-1 lg:col-span-1">
-                            <Link href={route('home')} className="mb-4 inline-block">
-                                <img src={logoUrl} alt="Tai-Oak Tours & Travel Logo" className="h-10 w-auto" />
-                            </Link>
-                            <h4 className="mb-3 font-semibold text-white">Tai-Oak Tours & Travel</h4>
-                            <p className="text-sm leading-relaxed">
-                                Your gateway to unforgettable Kenyan adventures...
-                            </p>
-                        </div>
-                        {/* Company Links */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Company</h4>
-                            <ul className="space-y-2">
-                                <li><Link href={route('home')} className="hover:text-white">Home</Link></li>
-                                <li><Link href={route('about')} className="hover:text-white">About Us</Link></li>
-                                <li><Link href={route('contact')} className="hover:text-white">Contact Us</Link></li>
-                                <li><Link href="#" className="hover:text-white">Careers</Link></li>
-                            </ul>
-                        </div>
-                        {/* Services */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Services</h4>
-                            <ul className="space-y-2">
-                                <li><Link href="#" className="hover:text-white">Tour Guiding</Link></li>
-                                <li><Link href="#" className="hover:text-white">Package Bookings</Link></li>
-                                <li><Link href="#" className="hover:text-white">Rental Services</Link></li>
-                                <li><Link href="#" className="hover:text-white">Hotel Reservations</Link></li>
-                            </ul>
-                        </div>
-                        {/* Newsletter */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Newsletter</h4>
-                            <p className="mb-3 text-sm">Subscribe for travel tips...</p>
-                            <form className="flex flex-col gap-2 sm:flex-row">
-                                <Input type="email" className="flex-grow bg-white/10 text-white placeholder:text-gray-400" placeholder="Your email" required />
-                                <Button variant={'default'} type="submit" className="shrink-0">Subscribe</Button>
-                            </form>
-                        </div>
-                         {/* Address */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Address</h4>
-                            <address className="space-y-2 not-italic">
-                                <p className="flex items-center gap-2"><MapPlus className="size-4 shrink-0 text-[#007562]" /> 123 Safari Lane...</p>
-                                <p className="flex items-center gap-2"><Phone className="size-4 shrink-0 text-[#007562]" /> +254 700 123 456</p>
-                                <p className="flex items-center gap-2"><Mail className="size-4 shrink-0 text-[#007562]" /> info@taioaktours.co.ke</p>
-                            </address>
-                        </div>
-                    </div>
-                    {/* Copyright */}
-                    <div className="mt-8 border-t border-gray-700 pt-6 text-center text-xs">
-                        <p>&copy; {new Date().getFullYear()} Tai-Oak Tours & Travel. All rights reserved.</p>
-                    </div>
-                </footer>
+                <PublicFooter />
                 {/* --- End Footer --- */}
             </div>
         </>

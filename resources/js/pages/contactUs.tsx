@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { useInView } from 'react-intersection-observer';
 import { SharedData } from '@/types';
 import PublicNavbar from '@/components/public-navbar';
+import PublicFooter from '@/components/public-footer';
 
 // Define logo path
 const logoUrl = '/storage/image_assets/logo.png'; // Adjust path if needed
@@ -77,7 +78,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Our Office</h3>
                                             <address className="not-italic text-gray-600">
-                                                123 Safari Lane, Westlands
+                                                Muthaiga Square, Thika Road
                                                 <br />
                                                 Nairobi, Kenya
                                             </address>
@@ -88,7 +89,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Phone</h3>
                                             <a href="tel:+254700123456" className="text-gray-600 hover:text-[#007562] hover:underline">
-                                                +254 700 123 456
+                                                +254 742 087 703
                                             </a>
                                             <p className="text-sm text-gray-500">(Mon-Fri, 9am - 5pm EAT)</p>
                                         </div>
@@ -98,7 +99,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Email</h3>
                                             <a href="mailto:info@taioaktours.co.ke" className="text-gray-600 hover:text-[#007562] hover:underline">
-                                                info@taioaktours.co.ke
+                                                sikinyicharity@gmail.com
                                             </a>
                                             <p className="text-sm text-gray-500">We typically respond within 24 hours</p>
                                         </div>
@@ -165,7 +166,7 @@ export default function ContactUs() {
                         <div className="overflow-hidden rounded-lg shadow-md">
                             {/* Replace with your actual Google Maps embed code */}
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127641.17934904937!2d36.76402365820312!3d-1.3030739999999907!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1678886456789!5m2!1sen!2sus" // Placeholder URL
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.850881570899!2d36.84701397496561!3d-1.261930998682896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f17!3m3!1m2!1s0x182f170978780797%3A0x7209355894759bac!2sMuthaiga%20Square!5e0!3m2!1sen!2ske!4v1716218900000!5m2!1sen!2ske"
                                 width="100%"
                                 height="450"
                                 style={{ border: 0 }}
@@ -179,63 +180,7 @@ export default function ContactUs() {
                 </div>{' '}
                 {/* End content wrapper */}
                 {/* --- Footer --- */}
-                <footer className="mt-auto w-full bg-[#152253] py-10 text-sm text-[#9a9a9a]">
-                    {/* ... Footer content (same as before) ... */}
-                     <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 md:grid-cols-3 lg:grid-cols-5">
-                        {/* Company Info */}
-                        <div className="md:col-span-1 lg:col-span-1">
-                            <Link href={route('home')} className="mb-4 inline-block">
-                                <img src={logoUrl} alt="Tai-Oak Tours & Travel Logo" className="h-10 w-auto" />
-                            </Link>
-                            <h4 className="mb-3 font-semibold text-white">Tai-Oak Tours & Travel</h4>
-                            <p className="text-sm leading-relaxed">
-                                Your gateway to unforgettable Kenyan adventures...
-                            </p>
-                        </div>
-                        {/* Company Links */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Company</h4>
-                            <ul className="space-y-2">
-                                <li><Link href={route('home')} className="hover:text-white">Home</Link></li>
-                                <li><Link href={route('about')} className="hover:text-white">About Us</Link></li>
-                                <li><Link href="#" className="hover:text-white">Contact Us</Link></li>
-                                <li><Link href="#" className="hover:text-white">Careers</Link></li>
-                            </ul>
-                        </div>
-                        {/* Services */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Services</h4>
-                            <ul className="space-y-2">
-                                <li><Link href="#" className="hover:text-white">Tour Guiding</Link></li>
-                                <li><Link href="#" className="hover:text-white">Package Bookings</Link></li>
-                                <li><Link href="#" className="hover:text-white">Rental Services</Link></li>
-                                <li><Link href="#" className="hover:text-white">Hotel Reservations</Link></li>
-                            </ul>
-                        </div>
-                        {/* Newsletter */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Newsletter</h4>
-                            <p className="mb-3 text-sm">Subscribe for travel tips...</p>
-                            <form className="flex flex-col gap-2 sm:flex-row">
-                                <Input type="email" className="flex-grow bg-white/10 text-white placeholder:text-gray-400" placeholder="Your email" required />
-                                <Button variant={'default'} type="submit" className="shrink-0">Subscribe</Button>
-                            </form>
-                        </div>
-                         {/* Address */}
-                        <div>
-                            <h4 className="mb-3 font-semibold text-white">Address</h4>
-                            <address className="space-y-2 not-italic">
-                                <p className="flex items-center gap-2"><MapPlus className="size-4 shrink-0 text-[#007562]" /> 123 Safari Lane...</p>
-                                <p className="flex items-center gap-2"><Phone className="size-4 shrink-0 text-[#007562]" /> +254 700 123 456</p>
-                                <p className="flex items-center gap-2"><Mail className="size-4 shrink-0 text-[#007562]" /> info@taioaktours.co.ke</p>
-                            </address>
-                        </div>
-                    </div>
-                    {/* Copyright */}
-                    <div className="mt-8 border-t border-gray-700 pt-6 text-center text-xs">
-                        <p>&copy; {new Date().getFullYear()} Tai-Oak Tours & Travel. All rights reserved.</p>
-                    </div>
-                </footer>
+                <PublicFooter />
                 {/* --- End Footer --- */}
             </div>{' '}
             {/* End main content div */}
