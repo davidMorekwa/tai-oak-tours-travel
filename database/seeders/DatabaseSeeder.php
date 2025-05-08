@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Itinerary;
+use App\Models\Location;
 use App\Models\Tour;
 use App\Models\tours;
 use App\Models\User;
@@ -22,7 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
+        Location::factory()->count(10)->create();
         Tour::factory(5)->create();
         Itinerary::factory(15)->create();
     }

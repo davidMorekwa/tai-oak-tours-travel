@@ -1,9 +1,70 @@
 -- Active: 1746446975436@@127.0.0.1@3306@travel-agency
 
+-- Locations
+
+-- Kenya
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Maasai Mara National Reserve', 'Kenya', 'storage/assets/locations/maasai_mara.jpg', NOW(), NOW()),
+('Amboseli National Park', 'Kenya', 'storage/assets/locations/amboseli.jpg', NOW(), NOW()),
+('Diani Beach', 'Kenya', 'storage/assets/locations/diani_beach.jpg', NOW(), NOW()),
+('Lake Nakuru National Park', 'Kenya', 'storage/assets/locations/lake_nakuru.jpg', NOW(), NOW()),
+('Mount Kenya', 'Kenya', 'storage/assets/locations/mount_kenya.jpg', NOW(), NOW());
+
+-- Tanzania
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Serengeti National Park', 'Tanzania', 'storage/assets/locations/serengeti.jpg', NOW(), NOW()),
+('Ngorongoro Crater', 'Tanzania', 'storage/assets/locations/ngorongoro_crater.jpg', NOW(), NOW()),
+('Mount Kilimanjaro', 'Tanzania', 'storage/assets/locations/kilimanjaro.jpg', NOW(), NOW()),
+('Tarangire National Park', 'Tanzania', 'storage/assets/locations/tarangire.jpg', NOW(), NOW());
+
+-- Zanzibar (Tanzania) - Treating Zanzibar as a distinct destination region within Tanzania for clarity
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Stone Town', 'Zanzibar', 'storage/assets/locations/stone_town.jpg', NOW(), NOW()),
+('Nungwi Beach', 'Zanzibar', 'storage/assets/locations/nungwi_beach.jpg', NOW(), NOW()),
+('Kendwa Beach', 'Zanzibar', 'storage/assets/locations/kendwa_beach.jpg', NOW(), NOW()),
+('Prison Island (Changuu Island)', 'Zanzibar', 'storage/assets/locations/prison_island_zanzibar.jpg', NOW(), NOW());
+
+-- Uganda
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Bwindi Impenetrable National Park', 'Uganda', 'storage/assets/locations/bwindi.jpg', NOW(), NOW()),
+('Murchison Falls National Park', 'Uganda', 'storage/assets/locations/murchison_falls.jpg', NOW(), NOW()),
+('Queen Elizabeth National Park', 'Uganda', 'storage/assets/locations/queen_elizabeth_np.jpg', NOW(), NOW()),
+('Jinja (Source of the Nile)', 'Uganda', 'storage/assets/locations/jinja_nile.jpg', NOW(), NOW());
+
+-- Rwanda
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Volcanoes National Park', 'Rwanda', 'storage/assets/locations/volcanoes_np_rwanda.jpg', NOW(), NOW()),
+('Kigali Genocide Memorial', 'Rwanda', 'storage/assets/locations/kigali_memorial.jpg', NOW(), NOW()),
+('Nyungwe Forest National Park', 'Rwanda', 'storage/assets/locations/nyungwe_forest.jpg', NOW(), NOW()),
+('Lake Kivu', 'Rwanda', 'storage/assets/locations/lake_kivu.jpg', NOW(), NOW());
+
+-- South Africa
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Kruger National Park', 'South Africa', 'storage/assets/locations/kruger_np.jpg', NOW(), NOW()),
+('Cape Town (Table Mountain & City)', 'South Africa', 'storage/assets/locations/cape_town.jpg', NOW(), NOW()),
+('Garden Route', 'South Africa', 'storage/assets/locations/garden_route.jpg', NOW(), NOW()),
+('Drakensberg Mountains', 'South Africa', 'storage/assets/locations/drakensberg.jpg', NOW(), NOW());
+
+-- Zambia
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Victoria Falls (Zambian side)', 'Zambia', 'storage/assets/locations/victoria_falls_zambia.jpg', NOW(), NOW()),
+('South Luangwa National Park', 'Zambia', 'storage/assets/locations/south_luangwa.jpg', NOW(), NOW()),
+('Lower Zambezi National Park', 'Zambia', 'storage/assets/locations/lower_zambezi.jpg', NOW(), NOW()),
+('Kafue National Park', 'Zambia', 'storage/assets/locations/kafue_np.jpg', NOW(), NOW());
+
+-- Zimbabwe
+INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
+('Victoria Falls (Zimbabwean side)', 'Zimbabwe', 'storage/assets/locations/victoria_falls_zimbabwe.jpg', NOW(), NOW()),
+('Hwange National Park', 'Zimbabwe', 'storage/assets/locations/hwange_np.jpg', NOW(), NOW()),
+('Mana Pools National Park', 'Zimbabwe', 'storage/assets/locations/mana_pools.jpg', NOW(), NOW()),
+('Great Zimbabwe Ruins', 'Zimbabwe', 'storage/assets/locations/great_zimbabwe_ruins.jpg', NOW(), NOW());
+
+
+-- TOURS + ITINERARIES
+
 -- 4 DAY MARA NAKURU
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -16,7 +77,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '4 DAYS MARA NAKURU',
-    'Kenya',
     4,
     'storage/assets/cheetah-lanndscape.jpg',
     'These 4 days Kenya safari to Masai Mara & Lake Nakuru safari covers the top Kenya wildlife parks: Masai Mara National game reserve famous for its population of lions, leopards, and cheetahs, and also yearly migration of zebra & wildebeest which occurs from July to October from Serengeti in Tanzania. Lake Nakuru National Park, found at the foot of the Great Rift Valley, you are assured of seeing the rhinos in black and white.',
@@ -64,12 +124,13 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 1, NOW(), NOW()),
+(4, 1, NOW(), NOW());
 
 -- 5 DAYS MASAI MArA NAKURU NAIVASHA
--- Insert statement for the 'tours' table for the 5-day safari
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -82,7 +143,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '5 DAYS MASAI MARA NAKURU NAIVASHA SAFARI',
-    'Kenya',
     5,
     'storage/assets/white-birds-landscape.jpeg', -- Placeholder image, update as needed
     'This safari covers the Great Rift Valley. Lake Nakuru, which is home to hundreds of thousands of flamingos, pelicans, and numerous other bird life, Lake Naivasha, and Hell’s Gate. You will also visit the Masai Mara, which has been declared one of the seven wonders of the world for its spectacular wildebeest migration. It is clear that there is so much to expect in this safari.',
@@ -94,11 +154,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 2.
--- If you know the ID, replace 2 with the actual ID.
-
--- Insert statements for the 'itineraries' table for the 5-day safari
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -142,12 +197,13 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 2, NOW(), NOW()),
+(4, 2, NOW(), NOW());
 
 -- 6 DAYS KENYA ADVENTURE SAFARI
--- Insert statement for the 'tours' table for the 6-day Kenya Adventure Safari
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -160,7 +216,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '6 DAYS KENYA ADVENTURE SAFARI',
-    'Kenya',
     6,
     'storage/assets/elephant-kilimanjaro-landscape.jpeg', -- Placeholder image, update as needed
     'This tour covers three world-class parks that are rich in diversity, wildlife, and culture. Your experience will include the dusty plains of Amboseli to the marshlands of Lake Nakuru, culminating at the "spotted land" of the Masai Mara National Reserve. These parks are popular among high-end tourists, backpackers, and even locals alike',
@@ -172,11 +227,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 3.
--- If you know the ID, replace 3 with the actual ID.
-
--- Insert statements for the 'itineraries' table for the 6-day safari
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -227,13 +277,14 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
-
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 3, NOW(), NOW()),
+(4, 3, NOW(), NOW()),
+(2, 3, NOW(), NOW());
 
 -- 7 DAYS KENYA ADVENTURE SAFARI
--- Insert statement for the 'tours' table for the 7-day (actually 10-day) Kenya & Tanzania Adventure Safari
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -246,7 +297,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '10 DAYS KENYA-TANZANIA ADVENTURE SAFARI', -- Title as provided
-    'Kenya & Tanzania', -- Country based on itinerary
     10, -- Duration based on detailed itinerary and pricing
     'storage/assets/wildebeest-landscape.jpg', -- Placeholder image, update as needed
     'Kenya and Tanzania are worldly known destinations with specific Masai Mara and Serengeti wildlife hubs. Your tour will be full of adventure as you get to see the big five and many more. Serengeti and Masai Mara are \'rich\' parks which will be worth your time. In addition, the Amboseli National Park with its vastly populated elephants will make your adventure more spectacular. This tour will be worth your time and money.',
@@ -258,11 +308,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 4.
--- If you know the ID, replace 4 with the actual ID.
-
--- Insert statements for the 'itineraries' table for the 10-day safari
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -341,12 +386,14 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(2, 5, NOW(), NOW()),
+(6, 5, NOW(), NOW()),
+(7, 5, NOW(), NOW());
 
 -- 7 DAYS KENYA TANZANIA
--- Insert statement for the 'tours' table for the 7-day Kenya Tanzania Safari
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -359,7 +406,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '7 DAYS KENYA TANZANIA',
-    'Kenya & Tanzania',
     7,
     'storage/assets/giraffe-kilimanjaro-landscape.jpeg', -- Placeholder image, update as needed
     'This 7-day super adventure at Amboseli National Park and Tanzania adventure is an all-around fun-filled trip in Kenya\'s second largest park and Tanzania parks. Amboseli is famously known for its wide range of elephants and splendid views of the African tallest mountain ‘’Mount Kilimanjaro”. Amboseli is one of the best parks in Kenya\'s ‘’East African countries and the entire world where you can adventure a large number of free-roaming elephants in their peaceful natural environment.',
@@ -371,11 +417,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 5.
--- If you know the ID, replace 5 with the actual ID.
-
--- Insert statements for the 'itineraries' table for the 7-day safari
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -433,12 +474,15 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
-
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 7, NOW(), NOW()),
+(4, 7, NOW(), NOW()),
+(2, 7, NOW(), NOW()),
+(6, 7, NOW(), NOW()),
+(7, 7, NOW(), NOW());
 -- 8 DAYS KENYA ADVENTURE
--- Insert statement for the 'tours' table for the 8-day Kenya Adventure Safari
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -451,7 +495,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '8 DAYS KENYA ADVENTURE SAFARI',
-    'Kenya',
     8,
     'storage/assets/masai-mara-hot-air-balloon-landscape.jpg', -- Placeholder image, update as needed
     'This is a week-long magical expedition to view the breathtaking roof of Africa, Kilimanjaro, and huge herds of elephants at Amboseli. You\'ll then head to the Rift Valley lakes i.e. Lake Naivasha, famous for huge flower farms and Hell\'s Gate National Park then to Lake Nakuru, famous for rhinos and flamingos. The tour climaxes at the world-famous Masai Mara National Reserve',
@@ -463,11 +506,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 6.
--- If you know the ID, replace 6 with the actual ID.
-
--- Insert statements for the 'itineraries' table for the 8-day safari
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -532,12 +570,14 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 6, NOW(), NOW()),
+(4, 6, NOW(), NOW()),
+(2, 6, NOW(), NOW());
 
 -- 10 DAYS KENYA-TANZANIA SAFARI
--- Insert statement for the 'tours' table for the 10-day Kenya Tanzania Safari
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -550,7 +590,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '10 DAYS KENYA TANZANIA SAFARI',
-    'Kenya & Tanzania',
     10,
     'storage/assets/ngorongoro-crater-landscape.jpg', -- Placeholder image, update as needed
     'Kenya and Tanzania are worldly known destinations with specific Masai Mara and Serengeti wildlife hubs. Your tour will be full of adventure as you get to see the big five and many more. Serengeti and Masai Mara are \'rich\' parks which will be worth your time. In addition, the Amboseli National Park with its vastly populated elephants will make your adventure more spectacular. This tour will be worth your time and money.',
@@ -562,11 +601,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 7.
--- If you know the ID, replace 7 with the actual ID.
-
--- Insert statements for the 'itineraries' table for the 10-day safari
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -645,12 +679,16 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 4, NOW(), NOW()),
+(4, 4, NOW(), NOW()),
+(2, 4, NOW(), NOW()),
+(6, 4, NOW(), NOW()),
+(7, 4, NOW(), NOW());
 
--- 11 DAYS KENYA TANZANIA
 -- 11 DAYS KENYA TANZANIA
 INSERT INTO `tours` (
     `title`,
-    `country`,
     `duration_days`,
     `image`,
     `description`,
@@ -664,7 +702,6 @@ INSERT INTO `tours` (
     `updated_at`
 ) VALUES (
     '11 DAYS KENYA TANZANIA',
-    'Kenya & Tanzania',
     11,
     'public/storage/assets/gazelle-landscape.jpeg', -- Placeholder image, please update as needed
     'Kenya and Tanzania are worldly known destinations with the specific Masai Mara and Serengeti wildlife hub. Your tour will be full of adventure as you get to see the big five and many more. Serengeti and Masai Mara are \'rich\' parks which will be worth your time. In addition, the Amboseli National Park with its vastly populated elephants will make your adventure more spectacular. This tour will be worth your time and money.',
@@ -677,11 +714,6 @@ INSERT INTO `tours` (
     NOW(),
     NOW()
 );
-
--- Assuming the tour inserted above gets id = 8.
--- If you know the ID, replace 8 with the actual ID.
--- Or use: SET @tour_id = LAST_INSERT_ID(); and then use @tour_id for tour_id below.
-
 INSERT INTO `itineraries` (
     `tour_id`,
     `day_number`,
@@ -767,3 +799,10 @@ INSERT INTO `itineraries` (
     NOW(),
     NOW()
 );
+INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 8, NOW(), NOW()),
+(4, 8, NOW(), NOW()),
+(2, 8, NOW(), NOW()),
+(9, 8, NOW(), NOW()),
+(6, 8, NOW(), NOW()),
+(7, 8, NOW(), NOW());

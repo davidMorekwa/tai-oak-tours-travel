@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Itinerary;
+use App\Models\Location;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -23,7 +24,6 @@ class ToursController extends Controller
             'search' => $request->input('search'),
             'country' => $request->input('country'),
         ];
-
         // Fetch paginated tours from the database
         $toursPaginator = Tour::query() // Start with query()
             ->orderBy('title') // Example: order by title
@@ -36,9 +36,13 @@ class ToursController extends Controller
                 });
             })
             ->when($filters['country'], function ($query, $country) {
-                $query->where('country', $country); // Exact match for dropdown
+                $query->whereHas('locations', function ($locationQuery) use ($country) {
+                    $locationQuery->where('country', $country);
+                });
             })
             ->paginate($perPage); // Use the $perPage variable
+
+
 
         // Transform the collection of tours within the paginator
         $transformedTours = $toursPaginator->getCollection()->map(function (Tour $tour) {
@@ -72,13 +76,7 @@ class ToursController extends Controller
         );
 
         // Get distinct countries for the filter dropdown
-        $availableCountries = Tour::query()
-            ->distinct()
-            ->whereNotNull('country') // Exclude null/empty countries
-            ->pluck('country')
-            ->sort()
-            ->values()
-            ->all();
+        $availableCountries = Location::query()->distinct('country')->pluck('country')->sort()->values()->all();
 
         return Inertia::render('tours', [
             'tourPackages' => $paginatedFormattedTours,
@@ -92,6 +90,7 @@ class ToursController extends Controller
         $tour = Tour::find($id);
         $tour->image = asset($tour->image);
         $itinerary = $tour->itineraries()->orderBy('day_number')->get();
-        return Inertia::render('tourDetails', ['tour'=>$tour, 'itinerary'=>$itinerary]);
+        $locations = $tour->locations()->get();
+        return Inertia::render('tourDetails', ['tour'=>$tour, 'itinerary'=>$itinerary, 'locations' => $locations]);
     }
 }

@@ -40,10 +40,12 @@ export default function PublicFooter() {
                 <div>
                     <h4 className="mb-3 font-semibold text-white">Services</h4>
                     <ul className="space-y-2">
-                        <li><Link href="#" className="hover:text-white">Tour Guiding</Link></li>
-                        <li><Link href="#" className="hover:text-white">Package Bookings</Link></li>
-                        <li><Link href="#" className="hover:text-white">Rental Services</Link></li>
-                        <li><Link href="#" className="hover:text-white">Hotel Reservations</Link></li>
+                        <li><Link href="#" className="hover:text-white">Air Ticketing</Link></li>
+                        <li><Link href="#" className="hover:text-white">Car Rentals</Link></li>
+                        <li><Link href="#" className="hover:text-white">Safari Packages</Link></li>
+                        <li><Link href="#" className="hover:text-white">Team Building</Link></li>
+                        <li><Link href="#" className="hover:text-white">Hotel Reservations and Bookings</Link></li>
+                        <li><Link href="#" className="hover:text-white">Excursions</Link></li>
                     </ul>
                 </div>
                 {/* Newsletter */}
@@ -60,9 +62,9 @@ export default function PublicFooter() {
                 <div>
                     <h4 className="mb-3 font-semibold text-white">Address</h4>
                     <address className="space-y-2 not-italic">
-                        <p className="flex items-center gap-2"><MapPlus className="size-4 shrink-0 text-[#007562]" /> 123 Safari Lane, Nairobi</p>
-                        <p className="flex items-center gap-2"><Phone className="size-4 shrink-0 text-[#007562]" /> +254 700 123 456</p>
-                        <p className="flex items-center gap-2"><Mail className="size-4 shrink-0 text-[#007562]" /> info@taioaktours.co.ke</p>
+                        <p className="flex items-center gap-2"><MapPlus className="size-4 shrink-0 text-[#007562]" />Muthaiga Square, Thika Road, Nairobi</p>
+                        <p className="flex items-center gap-2"><Phone className="size-4 shrink-0 text-[#007562]" /> +254 742 087 703</p>
+                        <p className="flex items-center gap-2"><Mail className="size-4 shrink-0 text-[#007562]" />taioaktraveltours2025@gmail.com</p>
                     </address>
                 </div>
             </div>
