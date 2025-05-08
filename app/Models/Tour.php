@@ -6,6 +6,7 @@ use Database\Factories\TourFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Itinerary;
+use App\Models\Location; // Add this line
 
 class Tour extends Model
 {
@@ -24,5 +25,10 @@ class Tour extends Model
 
     public function itineraries(){
         return $this->hasMany(Itinerary::class);
+    }
+
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class);
     }
 }

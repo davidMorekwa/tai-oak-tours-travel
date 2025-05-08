@@ -99,7 +99,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Email</h3>
                                             <a href="mailto:info@taioaktours.co.ke" className="text-gray-600 hover:text-[#007562] hover:underline">
-                                                sikinyicharity@gmail.com
+                                                taioaktraveltours2025@gmail.com
                                             </a>
                                             <p className="text-sm text-gray-500">We typically respond within 24 hours</p>
                                         </div>

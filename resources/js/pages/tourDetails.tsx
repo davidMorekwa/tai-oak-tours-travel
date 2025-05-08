@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label'; // Import Label
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { TourItinerary, TourPackage, type SharedData } from '@/types';
+import { TourItinerary, TourLocation, TourPackage, type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Check, Clock, DollarSign, MapPin, Star, Users, X } from 'lucide-react';
 import React, { useState } from 'react'; // Import useState
@@ -45,6 +45,7 @@ export default function TourDetails() {
 
     const tour = props.tour as TourPackage;
     const tourItinerary = props.itinerary as TourItinerary[];
+    const locations = props.locations as TourLocation[];
 
     // Animation hooks - Added bookingRef
     const animationOptions = { triggerOnce: true, threshold: 0.1 };
@@ -168,7 +169,7 @@ export default function TourDetails() {
                                 <div className="flex flex-col items-center">
                                     <MapPin className="mb-2 h-8 w-8 text-[#007562]" />
                                     <span className="font-semibold">Main Location</span>
-                                    <span className="text-sm text-gray-600">Maasai Mara</span> {/* Example */}
+                                    <span className="text-sm text-gray-600">{locations[0].name}</span> {/* Example */}
                                 </div>
                             </div>
                         </div>

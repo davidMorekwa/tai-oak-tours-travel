@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Location;
+use App\Models\Tour;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -39,6 +41,8 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $availableCountries = Location::query()->distinct('country')->pluck('country')->sort()->values()->all();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -51,6 +55,7 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'availableCountries' => $availableCountries,
         ];
     }
 }

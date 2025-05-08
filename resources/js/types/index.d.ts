@@ -40,6 +40,7 @@ export interface User {
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+    available_countries: string[];
 }
 // TRAVEL INFOMATION TYPES
 export interface TourPackage {
@@ -61,4 +62,9 @@ export interface TourItinerary {
     day_number: number,
     title: string,
     description: string,
+}
+export interface TourLocation {
+    id: number,
+    name: string,
+    country: string
 }

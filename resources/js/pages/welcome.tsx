@@ -10,15 +10,15 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { TourPackage, type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { MapPin, ShieldCheck, SlidersHorizontal, Users } from 'lucide-react';
+import { Head, Link, usePage } from '@inertiajs/react'; // Corrected import path
+import { Briefcase, DollarSign, Gem, Heart, Smile, Star } from 'lucide-react';
 import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Autoplay, EffectFade } from 'swiper/modules';
+import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 const heroTitle = 'Adventure Awaits';
@@ -61,13 +61,19 @@ interface PopularDestinationCardData {
 
 const popularDestinationCardsData: PopularDestinationCardData[] = [
     {
-        name: 'Amboseli Park',
+        name: 'Amboseli National Park Safari',
         imageSrc: '/storage/image_assets/pexels-pixabay-59989.jpg',
         description: "Witness majestic elephant herds against the iconic backdrop of Mount Kilimanjaro. A photographer's dream.",
         filterValue: 'amboseli',
     },
     {
-        name: 'Maasai Mara',
+        name: 'Family Adventures',
+        imageSrc: 'storage/assets/family-safari-landscape.jpeg', // Replace with actual image
+        description: 'Create lifelong memories with tours designed for all ages. Safe, engaging, and fun-filled experiences.',
+        filterValue: 'family',
+    },
+    {
+        name: 'Maasai Mara Safari',
         imageSrc: '/storage/image_assets/1.jpg',
         description: 'Home to the Great Migration, vast plains teeming with wildlife, and rich Maasai culture. An unparalleled safari experience.',
         filterValue: 'maasai-mara',
@@ -79,10 +85,34 @@ const popularDestinationCardsData: PopularDestinationCardData[] = [
         filterValue: 'diani-beach',
     },
     {
-        name: 'Mount Kenya',
+        name: 'Mt. Kilimanjaro Hiking',
+        imageSrc: 'storage/assets/kilimanjaro-landscape.jpeg', // Replace with actual image
+        description: "Conquer Africa's highest peak. Epic treks offering breathtaking views and a life-changing achievement.",
+        filterValue: 'kilimanjaro hiking',
+    },
+    {
+        name: 'Mount Kenya Trek',
         imageSrc: '/storage/image_assets/Mount_Kenya.jpg',
         description: "Challenge yourself with a trek to Africa's second-highest peak, surrounded by unique alpine flora and breathtaking views.",
         filterValue: 'mount-kenya',
+    },
+    {
+        name: 'Honeymoon Packages',
+        imageSrc: 'storage/assets/honeymoon-safari.jpg', // Replace with actual image
+        description: 'Celebrate your love with idyllic escapes. Luxurious lodges, private safaris, and unforgettable moments.',
+        filterValue: 'honeymoon',
+    },
+    {
+        name: 'Photography Safaris',
+        imageSrc: 'storage/assets/mama-elephant-with-kids-landscape.jpg', // Replace with actual image
+        description: 'Capture the perfect shot. Guided tours focusing on wildlife and landscape photography opportunities.',
+        filterValue: 'photography',
+    },
+    {
+        name: 'Cultural Immersions',
+        imageSrc: 'storage/assets/culture-safari-landscape.jpg', // Replace with actual image
+        description: 'Connect with local traditions. Authentic experiences visiting vibrant communities and learning ancient customs.',
+        filterValue: 'cultural',
     },
 ];
 
@@ -179,12 +209,12 @@ export default function Welcome() {
                         <h2 className="mb-4 text-3xl font-bold md:text-4xl">
                             {' '}
                             {/* Removed text-gray-900 */}
-                            Jambo! Welcome to Your Kenyan Adventure
+                            Jambo! Welcome to your Africa Adventure
                         </h2>
                         <p className="text-lg text-gray-300">
                             {' '}
                             {/* Changed text color */}
-                            Experience the magic of Kenya with Tai-Oak Tours & Travel. From breathtaking wildlife safaris in the Maasai Mara to serene
+                            Experience the magic of Africa with Tai-Oak Tours & Travel. From breathtaking wildlife safaris in the Maasai Mara to serene
                             beaches along the coast, our local experts craft personalized journeys filled with authentic moments and unforgettable
                             memories. Let's plan your dream trip!
                         </p>
@@ -204,32 +234,64 @@ export default function Welcome() {
                 >
                     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                         <div className="mb-10 flex flex-col items-center text-center sm:flex-row sm:items-baseline sm:justify-between sm:text-left">
-                            <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">Popular Destinations</h2>
+                            <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">Popular Packages</h2>
                             <Link href={route('tours')}>
                                 <Button variant={'default'} className="mt-4 shrink-0 hover:cursor-pointer sm:mt-0">
-                                    See All Destinations
+                                    See All Packages
                                 </Button>
                             </Link>
                         </div>
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                        <Swiper
+                            modules={[Navigation, Pagination, Autoplay]} // Add Navigation and Pagination modules
+                            spaceBetween={24} // Space between slides
+                            slidesPerView={1} // Default for smallest screens
+                            navigation // Enable navigation arrows
+                            autoplay={{ delay: 3000, disableOnInteraction: false }} // Added autoplay
+                            breakpoints={{
+                                // when window width is >= 640px
+                                640: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                // when window width is >= 768px
+                                768: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 24,
+                                },
+                                // when window width is >= 1024px
+                                1024: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 24,
+                                },
+                            }}
+                            className="pb-10 px-10 rounded-lg" // Add padding-bottom for pagination dots if they overlap
+                        >
                             {popularDestinationCardsData.map((destination) => (
-                                <Link
-                                    key={destination.filterValue}
-                                    href={route('tours', { search: destination.filterValue })}
-                                    className="block" // Make the link take up the card space for clickability
-                                >
-                                    <Card className="flex h-full flex-col overflow-hidden border-none bg-[#f5e7c5] pt-0 shadow-md transition-transform duration-300 ease-in-out hover:z-10 hover:scale-105 hover:shadow-lg">
-                                        <img src={destination.imageSrc} className="h-48 w-full object-cover" alt={destination.name} loading="lazy" />
-                                        <CardHeader className="pt-4 pb-2 text-gray-900">
-                                            <h3 className="text-lg font-semibold">{destination.name}</h3>
-                                        </CardHeader>
-                                        <CardDescription className="flex-grow px-6 pb-4 text-sm text-gray-700">
-                                            {destination.description}
-                                        </CardDescription>
-                                    </Card>
-                                </Link>
+                                <SwiperSlide key={destination.filterValue} className="h-auto group">
+                                    {' '}
+                                    {/* Ensure slides adapt to content height */}
+                                    <Link
+                                        href={route('tours', { search: destination.filterValue })}
+                                        className="block h-full" // Make the link take up the card space and ensure full height
+                                    >
+                                        <Card className="flex h-full flex-col overflow-hidden border-none bg-[#f5e7c5] pt-0 shadow-md transition-transform duration-300 ease-in-out group-[.swiper-slide-active]:scale-105 group-[&:not(.swiper-slide-active)]:hover:z-10 group-[&:not(.swiper-slide-active)]:hover:scale-105 group-[&:not(.swiper-slide-active)]:hover:shadow-lg">
+                                            <img
+                                                src={destination.imageSrc}
+                                                className="h-48 w-full object-cover"
+                                                alt={destination.name}
+                                                loading="lazy"
+                                            />
+                                            <CardHeader className="pt-4 pb-2 text-gray-900">
+                                                <h3 className="text-lg font-semibold">{destination.name}</h3>
+                                            </CardHeader>
+                                            <CardDescription className="flex-grow px-6 pb-4 text-sm text-gray-700">
+                                                {destination.description}
+                                            </CardDescription>
+                                        </Card>
+                                    </Link>
+                                </SwiperSlide>  
                             ))}
-                        </div>
+                        </Swiper>
                     </div>
                 </section>
                 {/* --- End Popular Destinations Section --- */}
@@ -247,38 +309,63 @@ export default function Welcome() {
                     <div className="mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Why Travel With Tai-Oak?</h2>
                         <p className="mx-auto mb-12 max-w-3xl text-lg text-gray-700">
-                            Your dream Kenyan adventure deserves more than just a booking service... Discover the difference local expertise makes.
+                            Your dream African adventure deserves more than just a booking service... Discover the difference local expertise makes.
                         </p>
-                        <div className="grid grid-cols-1 gap-8 text-left md:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-8 text-left sm:grid-cols-2 lg:grid-cols-3">
                             {/* Benefit Icons use dark blue background */}
-                            {/* ... benefit blocks remain the same ... */}
                             <div className="flex flex-col items-center text-center md:items-start md:text-left">
                                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#152253] text-white">
-                                    <MapPin className="h-6 w-6" />
+                                    <Briefcase className="h-6 w-6" />
                                 </div>
-                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Deep Local Knowledge</h3>
-                                <p className="text-gray-600">Born and raised in Kenya, our team offers unparalleled insights...</p>
+                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Professionalism</h3>
+                                <p className="text-gray-600">
+                                    Our commitment to excellence ensures every detail of your journey is handled with utmost care and expertise.
+                                </p>
                             </div>
                             <div className="flex flex-col items-center text-center md:items-start md:text-left">
                                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#152253] text-white">
-                                    <SlidersHorizontal className="h-6 w-6" />
+                                    <Star className="h-6 w-6" />
                                 </div>
-                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Tailor-Made Adventures</h3>
-                                <p className="text-gray-600">Forget cookie-cutter tours. We listen to your interests...</p>
+                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Quality Services</h3>
+                                <p className="text-gray-600">
+                                    We pride ourselves on delivering top-tier services, from luxury accommodations to seamless travel arrangements.
+                                </p>
                             </div>
                             <div className="flex flex-col items-center text-center md:items-start md:text-left">
                                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#152253] text-white">
-                                    <ShieldCheck className="h-6 w-6" />
+                                    <DollarSign className="h-6 w-6" />
                                 </div>
-                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Travel with Confidence</h3>
-                                <p className="text-gray-600">Your safety and comfort are our top priorities...</p>
+                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Affordability</h3>
+                                <p className="text-gray-600">
+                                    Experience the best of Africa without breaking the bank. We offer competitive pricing for exceptional adventures.
+                                </p>
                             </div>
                             <div className="flex flex-col items-center text-center md:items-start md:text-left">
                                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#152253] text-white">
-                                    <Users className="h-6 w-6" />
+                                    <Gem className="h-6 w-6" />
                                 </div>
-                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Genuine Cultural Connections</h3>
-                                <p className="text-gray-600">We believe in responsible tourism that benefits local communities...</p>
+                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Value For Money</h3>
+                                <p className="text-gray-600">
+                                    We believe in providing outstanding experiences that offer true value, creating memories that last a lifetime.
+                                </p>
+                            </div>
+                            <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#152253] text-white">
+                                    <Smile className="h-6 w-6" />
+                                </div>
+                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Friendly Guides and Team</h3>
+                                <p className="text-gray-600">
+                                    Our passionate and knowledgeable local guides are dedicated to making your trip engaging and enjoyable.
+                                </p>
+                            </div>
+                            <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#152253] text-white">
+                                    <Heart className="h-6 w-6" />
+                                </div>
+                                <h3 className="mb-2 text-xl font-semibold text-gray-900">Customer Satisfaction</h3>
+                                <p className="text-gray-600">
+                                    Your happiness is our priority. We strive to exceed your expectations and ensure a delightful travel experience.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -326,7 +413,9 @@ export default function Welcome() {
                                         <p className="line-clamp-4 text-sm">{tour.description}</p>
                                     </CardDescription>
                                     <CardFooter className="mt-auto flex flex-col items-start px-6 pt-2 pb-6">
-                                        <p className="mb-3 text-lg font-semibold text-[#007562]">Starting From ${tour.low_season_price.toLocaleString()}</p>
+                                        <p className="mb-3 text-lg font-semibold text-[#007562]">
+                                            Starting From ${tour.low_season_price.toLocaleString()}
+                                        </p>
                                         <Link href={route('details', tour.id)}>
                                             <Button variant={'default'} className="w-full sm:w-auto">
                                                 View Itinerary

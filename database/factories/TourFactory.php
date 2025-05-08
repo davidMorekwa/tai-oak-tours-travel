@@ -18,8 +18,6 @@ class TourFactory extends Factory
      */
     public function definition(): array
     {
-        $countries = array('Kenya', 'Tanzania');
-        $num = $this->faker->numberBetween(0,1);
         return [
             'title' => $this->faker->words(3, true),
             'duration_days' => $this->faker->numberBetween(0,7),
@@ -29,7 +27,6 @@ class TourFactory extends Factory
             'high_season_price' => $this->faker->numberBetween(5,7),
             'rating' => $this->faker->numberBetween(0,5),
             'is_featured' => $this->faker->boolean(),
-            'country' => $countries[$num],
             'highlights' => "hightligh1,  hightligh2,  hightligh3,  hightligh4,  hightligh5"
         ];
     }

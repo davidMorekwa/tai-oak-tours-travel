@@ -93,9 +93,9 @@ export default function Tours() {
                         )}
                     >
                         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-                            <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">Explore Our Kenyan Tours</h1>
+                            <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">Explore Our Tours</h1>
                             <p className="text-lg text-gray-300">
-                                Discover meticulously crafted itineraries designed to showcase the best of Kenya's wildlife, landscapes, culture, and
+                                Discover meticulously crafted itineraries designed to showcase the best of Africa's wildlife, landscapes, culture, and
                                 coastline. Find your perfect adventure below.
                             </p>
                         </div>
@@ -161,10 +161,10 @@ export default function Tours() {
                                             <SelectTrigger id="country-filter" className="w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-[#152253] focus:ring-[#152253] sm:text-sm">
                                                 <SelectValue placeholder="Select a country" />
                                             </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="all">All Countries</SelectItem>
+                                            <SelectContent className='bg-white'>
+                                                <SelectItem value="all" className='text-gray-900'>All Countries</SelectItem>
                                                 {props.availableCountries.map((countryName) => (
-                                                    <SelectItem key={countryName} value={countryName}>
+                                                    <SelectItem key={countryName} value={countryName} className='text-gray-900'>
                                                         {countryName}
                                                     </SelectItem>
                                                 ))}
@@ -219,12 +219,14 @@ export default function Tours() {
                                                 <p className="mb-2 line-clamp-3">{pkg.description}</p> {/* Limit description lines */}
                                             </CardDescription>
                                             <CardFooter className="mt-auto flex items-center justify-between bg-[#e6d9b9] px-6 py-3"> {/* Slightly darker footer */}
-                                            <div className="text-sm text-[#152253]">
-                                                    <p className="font-semibold">
-                                                        Low: ${pkg.low_season_price.toLocaleString()}
+                                            <div className="text-[#152253]"> {/* Base color for the price section */}
+                                                    <p className="flex items-baseline"> {/* Align text along baseline */}
+                                                        <span className="mr-1 text-xs font-medium">Low (Jan-June):</span>
+                                                        <span className="text-sm font-bold">${pkg.low_season_price.toLocaleString()}</span>
                                                     </p>
-                                                    <p className="font-semibold">
-                                                        Peak: ${pkg.high_season_price.toLocaleString()}
+                                                    <p className="mt-0.5 flex items-baseline"> {/* Add small top margin, align text */}
+                                                        <span className="mr-1 text-xs font-medium">Peak (July-Dec):</span>
+                                                        <span className="text-sm font-bold">${pkg.high_season_price.toLocaleString()}</span>
                                                     </p>
                                                 </div>
                                                 <Link href={route('details', pkg.id)}> {/* TODO: Route to the tourpackage infomation */}
