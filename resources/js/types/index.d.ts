@@ -68,3 +68,13 @@ export interface TourLocation {
     name: string,
     country: string
 }
+export interface FlashMessage {
+    success?: string;
+    error?: string;
+}
+export interface ItineraryItem {
+    id: number;
+    day_number: number;
+    title: string;
+    description: string;
+}
