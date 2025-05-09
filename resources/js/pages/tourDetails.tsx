@@ -44,6 +44,8 @@ export default function TourDetails() {
     const logoUrl = '/storage/image_assets/logo.jpg'; // Ensure correct path
 
     const tour = props.tour as TourPackage;
+    console.log('Tour');
+    console.log(tour);
     const tourItinerary = props.itinerary as TourItinerary[];
     const locations = props.locations as TourLocation[];
 

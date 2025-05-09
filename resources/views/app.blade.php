@@ -4,10 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        {{-- <title inertia>{{ config('app.name', 'Tai-Oaks T & T') }}</title> --}}
+        <title>Tai-Oaks T & T</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link rel="icon" href="{{ asset('storage/image_assets/logo.jpg') }}" type="image/x-icon">
 
         @routes
         @viteReactRefresh

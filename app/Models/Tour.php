@@ -20,7 +20,8 @@ class Tour extends Model
         "rating",
         "is_featured",
         'country',
-        "highlights"
+        "highlights",
+        "image"
     ];
 
     public function itineraries(){
