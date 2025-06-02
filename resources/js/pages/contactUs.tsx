@@ -89,7 +89,7 @@ export default function ContactUs() {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800">Phone</h3>
                                             <a href="tel:+254700123456" className="text-gray-600 hover:text-[#007562] hover:underline">
-                                                +254 742 087 703
+                                                +254 741 775 694
                                             </a>
                                             <p className="text-sm text-gray-500">(Mon-Fri, 9am - 5pm EAT)</p>
                                         </div>

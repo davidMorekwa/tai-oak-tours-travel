@@ -63,7 +63,7 @@ export default function PublicFooter() {
                     <h4 className="mb-3 font-semibold text-white">Address</h4>
                     <address className="space-y-2 not-italic">
                         <p className="flex items-center gap-2"><MapPlus className="size-4 shrink-0 text-[#007562]" />Muthaiga Square, Thika Road, Nairobi</p>
-                        <p className="flex items-center gap-2"><Phone className="size-4 shrink-0 text-[#007562]" /> +254 742 087 703</p>
+                        <p className="flex items-center gap-2"><Phone className="size-4 shrink-0 text-[#007562]" /> +254 741 775 694</p>
                         <p className="flex items-center gap-2"><Mail className="size-4 shrink-0 text-[#007562]" />taioaktraveltours2025@gmail.com</p>
                     </address>
                 </div>
