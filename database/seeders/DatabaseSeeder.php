@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        Location::factory()->count(10)->create();
-        Tour::factory(5)->create();
-        Itinerary::factory(15)->create();
+        // Location::factory()->count(10)->create();
+        // Tour::factory(5)->create();
+        // Itinerary::factory(15)->create();
     }
 }

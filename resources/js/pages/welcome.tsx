@@ -9,8 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { TourPackage, type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react'; // Corrected import path
+import { TourPackage, type SharedData } from '@/types'; // Removed router as useForm handles submission
+import { Head, Link, useForm, usePage } from '@inertiajs/react'; // Added useForm
 import { Briefcase, DollarSign, Gem, Heart, Smile, Star } from 'lucide-react';
 import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -121,7 +121,6 @@ export default function Welcome() {
     const { auth } = props;
 
     const featuredPackages = props.featured_packages as TourPackage[];
-    console.log('Featured Packages:', featuredPackages);
 
     const logoUrl = '/storage/image_assets/logo.jpg'; // Corrected path if needed
 
@@ -133,18 +132,35 @@ export default function Welcome() {
     const { ref: featuredPackagesRef, inView: featuredPackagesInView } = useInView(animationOptions);
     const { ref: tripPlannerRef, inView: tripPlannerInView } = useInView(animationOptions);
 
-    // State for Trip Planner
-    const [selectedDestination, setSelectedDestination] = useState<string | undefined>();
-    const [numberOfPersons, setNumberOfPersons] = useState<number>(1);
-    const [checkInDate, setCheckInDate] = useState<Date | undefined>();
-    const [checkOutDate, setCheckOutDate] = useState<Date | undefined>();
+    // Use Inertia's useForm for the Trip Planner
+    const { data: tripData, setData: setTripData, post: postTripData, processing: tripProcessing, errors: tripErrors, reset: resetTripForm } = useForm({
+        destination: '',
+        user_name: '',
+        user_email: '',
+        number_of_people: 1,
+        check_in_date: undefined as Date | undefined,
+        check_out_date: undefined as Date | undefined,
+    });
 
     const handleTripPlanSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const tripData = { destination: selectedDestination, persons: numberOfPersons, checkIn: checkInDate, checkOut: checkOutDate };
-        console.log('Trip Planner Data:', tripData);
-        alert('Trip details submitted for checking! (Placeholder - Backend needed)');
+        console.log('Submitting Trip Planner Data:', tripData);
+        postTripData(route('check.availability'), { // Use the named route
+            preserveScroll: true,
+            onSuccess: () => {
+                alert('Your trip details have been submitted successfully!');
+                resetTripForm('destination', 'user_name', 'user_email', 'number_of_people', 'check_in_date', 'check_out_date'); // Reset form fields
+            },
+            onError: (errors) => {
+                console.error('Error submitting trip details:', errors);
+                // You can display errors more gracefully if needed
+                // For now, a generic alert
+                const errorMessages = Object.values(errors).join('\n');
+                alert(`There was an error submitting your trip details:\n${errorMessages}\nPlease try again later.`);
+            },
+        });
     };
+
 
     return (
         <>
@@ -445,13 +461,44 @@ export default function Welcome() {
                     </div>
                     {/* Form uses white background */}
                     <form onSubmit={handleTripPlanSubmit} className="w-full max-w-4xl rounded-lg bg-white p-8 shadow-md lg:p-10">
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                            {/* ... form inputs ... */}
+                        {/* Grid might need further adjustment if more fields are added.
+                            For 6 fields, changing to lg:grid-cols-2 will result in 3 rows of 2 items on large screens. */}
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+                            
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="userName" className="font-semibold">
+                                    Your Name <span className="text-red-500">*</span>
+                                </Label>
+                                <Input
+                                    id="userName"
+                                    type="text"
+                                    placeholder="Full Name"
+                                    value={tripData.user_name}
+                                    onChange={(e) => setTripData('user_name', e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="email" className="font-semibold">
+                                    Your Email <span className="text-red-500">*</span>
+                                </Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    value={tripData.user_email}
+                                    onChange={(e) => setTripData('user_email', e.target.value)}
+                                    required
+                                />
+                            </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="destination" className="font-semibold">
-                                    Destination
+                                    Destination <span className="text-red-500">*</span>
                                 </Label>
-                                <Select value={selectedDestination} onValueChange={setSelectedDestination}>
+                                <Select
+                                    value={tripData.destination}
+                                    onValueChange={(value) => setTripData('destination', value)}
+                                >
                                     <SelectTrigger id="destination">
                                         <SelectValue placeholder="Select Destination" />
                                     </SelectTrigger>
@@ -466,26 +513,26 @@ export default function Welcome() {
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="persons" className="font-semibold">
-                                    Number of Persons
+                                    Number of Persons <span className="text-red-500">*</span>
                                 </Label>
                                 <Input
                                     id="persons"
                                     type="number"
                                     placeholder="e.g., 2"
                                     min="1"
-                                    value={numberOfPersons}
-                                    onChange={(e) => setNumberOfPersons(parseInt(e.target.value, 10) || 1)}
+                                    value={tripData.number_of_people}
+                                    onChange={(e) => setTripData('number_of_people', parseInt(e.target.value, 10) || 1)}
                                     required
                                 />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="checkin" className="font-semibold">
-                                    Check-in Date
+                                    Check-in Date <span className="text-red-500">*</span>
                                 </Label>
                                 {/* Date pickers use cream background */}
                                 <DatePicker
-                                    date={checkInDate}
-                                    setDate={setCheckInDate}
+                                    date={tripData.check_in_date}
+                                    setDate={(date) => setTripData('check_in_date', date)}
                                     buttonId="checkin"
                                     className="bg-[#f5e7c5] hover:bg-[#e6d9b9]"
                                 />
@@ -496,15 +543,15 @@ export default function Welcome() {
                                 </Label>
                                 {/* Date pickers use cream background */}
                                 <DatePicker
-                                    date={checkOutDate}
-                                    setDate={setCheckOutDate}
+                                    date={tripData.check_out_date}
+                                    setDate={(date) => setTripData('check_out_date', date)}
                                     buttonId="checkout"
                                     className="bg-[#f5e7c5] hover:bg-[#e6d9b9]"
                                 />
                             </div>
                         </div>
                         <div className="mt-8 text-center">
-                            <Button type="submit" variant={'default'} size={'lg'} className="w-full px-8 sm:w-auto">
+                            <Button type="submit" variant={'default'} size={'lg'} className="w-full px-8 sm:w-auto" disabled={tripProcessing}>
                                 Check Availability
                             </Button>
                         </div>

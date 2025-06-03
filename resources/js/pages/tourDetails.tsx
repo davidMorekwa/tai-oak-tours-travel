@@ -9,8 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label'; // Import Label
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { TourItinerary, TourLocation, TourPackage, type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { TourItinerary, TourLocation, TourPackage, type SharedData } from '@/types'; // Removed router
+import { Head, Link, useForm, usePage } from '@inertiajs/react'; // Added useForm
 import { Check, Clock, DollarSign, MapPin, Star, Users, X } from 'lucide-react';
 import React, { useState } from 'react'; // Import useState
 import { useInView } from 'react-intersection-observer';
@@ -39,13 +39,9 @@ const exclusions = [
 
 export default function TourDetails() {
     const { props, component } = usePage<SharedData>();
-    console.log('Props');
-    console.log(props);
     const logoUrl = '/storage/image_assets/logo.jpg'; // Ensure correct path
 
     const tour = props.tour as TourPackage;
-    console.log('Tour');
-    console.log(tour);
     const tourItinerary = props.itinerary as TourItinerary[];
     const locations = props.locations as TourLocation[];
 
@@ -58,26 +54,32 @@ export default function TourDetails() {
     const { ref: inclusionsRef, inView: inclusionsInView } = useInView(animationOptions);
     const { ref: highlightsRef, inView: highlightsInView } = useInView(animationOptions);
     const { ref: ctaRef, inView: ctaInView } = useInView(animationOptions);
+    
+    // Use Inertia's useForm for the Booking Request Widget
+    const { data: bookingRequestData, setData: setBookingRequestData, post: postBookingRequest, processing: bookingProcessing, errors: bookingErrors, reset: resetBookingForm } = useForm({
+        destination: tour.title, 
+        user_name: '',
+        user_email: '',
+        check_in_date: undefined as Date | undefined, // Maps to 'checkInDate' for mailable
+        number_of_people: 1, // Maps to 'numberOfPeople' for mailable
+        message: '',      // Maps to 'userMessage' for mailable
+    });
 
-    // State for Booking Widget
-    const [departureDate, setDepartureDate] = useState<Date | undefined>();
-    const [numTravelers, setNumTravelers] = useState<number>(2); // Default to 2 travelers
-    const [bookingMessage, setBookingMessage] = useState<string>('');
-
-    // Placeholder Handler for Booking Widget Submission
     const handleBookingRequestSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const bookingRequestData = {
-            tourId: tour.id,
-            tourTitle: tour.title,
-            departureDate: departureDate,
-            travelers: numTravelers,
-            message: bookingMessage,
-        };
         console.log('Booking Request Data:', bookingRequestData);
-        // ** TODO: Replace with Inertia useForm submission to backend **
-        // Example: Inertia.post(route('tours.requestQuote', { tour: tourData.id }), bookingRequestData);
-        alert('Availability request sent! We will contact you shortly with details and a quote. (Placeholder)');
+        postBookingRequest(route('check.availability'), { // New route name
+            preserveScroll: true,
+            onSuccess: () => {
+                alert('Your booking request has been sent! We will contact you shortly with details and a quote.');
+                resetBookingForm('user_name', 'user_email', 'check_in_date', 'number_of_people', 'message'); // Reset relevant fields
+            },
+            onError: (errors) => {
+                console.error('Error submitting booking request:', errors);
+                const errorMessages = Object.values(errors).join('\n');
+                alert(`There was an error submitting your request:\n${errorMessages}\nPlease try again.`);
+            },
+        });
     };
 
     return (
@@ -194,31 +196,61 @@ export default function TourDetails() {
                                 <h2 className="mb-6 text-center text-3xl font-bold text-gray-900">Check Availability & Request Quote</h2>
                                 <form onSubmit={handleBookingRequestSubmit} className="space-y-6">
                                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                        {/* User Name */}
+                                        <div className="flex flex-col space-y-1.5">
+                                            <Label htmlFor="userName" className="font-semibold">
+                                                Full Name <span className="text-red-500">*</span>
+                                            </Label>
+                                            <Input
+                                                id="userName"
+                                                type="text"
+                                                placeholder="Your Full Name"
+                                                value={bookingRequestData.user_name}
+                                                onChange={(e) => setBookingRequestData('user_name', e.target.value)}
+                                                required
+                                                className="bg-white"
+                                            />
+                                        </div>
+                                        {/* User Email */}
+                                        <div className="flex flex-col space-y-1.5">
+                                            <Label htmlFor="userEmail" className="font-semibold">
+                                                Email Address <span className="text-red-500">*</span>
+                                            </Label>
+                                            <Input
+                                                id="userEmail"
+                                                type="email"
+                                                placeholder="you@example.com"
+                                                value={bookingRequestData.user_email}
+                                                onChange={(e) => setBookingRequestData('user_email', e.target.value)}
+                                                required
+                                                className="bg-white"
+                                            />
+                                        </div>
                                         {/* Departure Date */}
                                         <div className="flex flex-col space-y-1.5">
                                             <Label htmlFor="departureDate" className="font-semibold">
-                                                Preferred Departure Date
+                                                Check-In Date  <span className="text-red-500">*</span>
                                             </Label>
                                             <DatePicker
-                                                date={departureDate}
-                                                setDate={setDepartureDate}
+                                                date={bookingRequestData.check_in_date}
+                                                setDate={(date) => setBookingRequestData('check_in_date', date)}
                                                 buttonId="departureDate"
-                                                placeholder="Select start date"
+                                                placeholder="Select check-in date"
                                                 className="bg-white hover:bg-white hover:placeholder:text-black" // Cream background for button
                                             />
                                         </div>
                                         {/* Number of Travelers */}
                                         <div className="flex flex-col space-y-1.5">
                                             <Label htmlFor="travelers" className="font-semibold">
-                                                Number of Travelers
+                                                Number of Travelers  <span className="text-red-500">*</span>
                                             </Label>
                                             <Input
                                                 id="travelers"
                                                 type="number"
                                                 placeholder="e.g., 2"
                                                 min="1"
-                                                value={numTravelers}
-                                                onChange={(e) => setNumTravelers(Math.max(1, parseInt(e.target.value, 10) || 1))} // Ensure min 1
+                                                value={bookingRequestData.number_of_people}
+                                                onChange={(e) => setBookingRequestData('number_of_people', Math.max(1, parseInt(e.target.value, 10) || 1))}
                                                 required
                                                 className="bg-white" // Ensure input bg is white
                                             />
@@ -231,15 +263,16 @@ export default function TourDetails() {
                                         </Label>
                                         <textarea
                                             id="message"
-                                            rows={6}
-                                            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border bg-transparent p-3 text-base shadow-xs transition-[color,box-shadow] focus:outline-none focus-visible:ring-[3px] md:text-sm"
-                                            placeholder="Tell us how we can help..."
-                                            required
+                                            rows={4} // Adjusted rows
+                                            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border bg-white p-3 text-base shadow-xs transition-[color,box-shadow] focus:outline-none focus-visible:ring-[3px] md:text-sm" // Ensure bg-white
+                                            placeholder="Any specific requests, preferred accommodation type, or questions..."
+                                            value={bookingRequestData.message}
+                                            onChange={(e) => setBookingRequestData('message', e.target.value)}
                                         ></textarea>
                                     </div>
                                     {/* Submit Button */}
                                     <div className="pt-2 text-center">
-                                        <Button type="submit" size="lg" variant="default" className="w-full sm:w-auto">
+                                        <Button type="submit" size="lg" variant="default" className="w-full sm:w-auto" disabled={bookingProcessing}>
                                             Request Availability & Quote
                                         </Button>
                                     </div>

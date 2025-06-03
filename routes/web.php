@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ItineraryController;
 use App\Http\Controllers\ToursController;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,8 +17,12 @@ Route::get('/contact', function () {
 })->name('contact');
 Route::get('/tours', [ToursController::class, 'getAllTours'])->name('tours');
 Route::get('/tours/{id}', [ToursController::class, 'getTourAndItinerary'])->name('details');
+Route::post('/check-availability', [EmailController::class, 'handleAvailabilityCheck'])->name('check.availability');
+Route::post('/contact-us', [EmailController::class, 'handleContactFormSubmission'])->name('contact.submit');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create']);
+    Route::post('/register', [RegisteredUserController::class, 'store']);
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');

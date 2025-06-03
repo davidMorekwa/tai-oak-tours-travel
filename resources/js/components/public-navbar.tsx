@@ -31,7 +31,6 @@ export default function PublicNavbar() {
     const { component, props } = usePage<SharedData>();
     const logoUrl = '/storage/image_assets/logo.jpg';
     const availableCountries = (props.availableCountries as String[]) || [];
-    console.log('Available Countries:', availableCountries);
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm">
