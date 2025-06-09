@@ -17,7 +17,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 const categories = ['Safari', 'Beach Holiday', 'Mountain Trekking', 'Cultural Tour', 'City Tour', 'Adventure Sports'];
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: route('dashboard') }, // Assuming 'dashboard' is the admin dashboard route
+    { title: 'Dashboard', href: route('admin.dashboard') }, // Assuming 'dashboard' is the admin dashboard route
     { title: 'Tours', href: route('admin.tours.index') }, // Replace # with route('admin.tours.index') if you have a tour listing page
     { title: 'Add New Tour', href: route('admin.tours.create') },
 ];

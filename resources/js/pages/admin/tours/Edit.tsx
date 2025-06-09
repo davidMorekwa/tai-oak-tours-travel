@@ -65,7 +65,7 @@ export default function EditTour() {
     }, [flash]);
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: route('dashboard') },
+        { title: 'Dashboard', href: route('admin.dashboard') },
         { title: 'Tours', href: route('admin.tours.index') },
         { title: 'Edit Tour', href: route('admin.tours.edit', tour.id) },
     ];

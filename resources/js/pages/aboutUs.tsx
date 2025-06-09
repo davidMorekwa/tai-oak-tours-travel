@@ -113,38 +113,6 @@ export default function AboutUs() {
                         </div>
                     </section>
 
-                    {/* Meet the Team Section - ANIMATED */}
-                    <section
-                        ref={teamRef}
-                        className={cn(
-                            'mb-8 rounded-lg bg-[#f5e7c5] p-6 shadow-md md:p-8',
-                            'opacity-0 transition-opacity delay-200 duration-1000 ease-in-out', // Added delay
-                            teamInView ? 'opacity-100' : '',
-                        )}
-                    >
-                        <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">Meet Our Passionate Team</h2>
-                        <p className="mx-auto mb-10 max-w-2xl text-center text-lg text-gray-700">
-                            The heart of Tai-Oak lies in our dedicated team of local experts who bring your Kenyan adventure to life.
-                        </p>
-                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            {teamMembers.map((member, index) => (
-                                <div
-                                    key={index}
-                                    className="flex flex-col items-center rounded-lg bg-white p-6 text-center shadow-md transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-                                >
-                                    <img
-                                        src={member.imageUrl}
-                                        alt={member.name}
-                                        className="mb-4 h-32 w-32 rounded-full object-cover ring-4 ring-[#007562]/50"
-                                    />
-                                    <h3 className="mb-1 text-xl font-semibold text-gray-900">{member.name}</h3>
-                                    <p className="mb-3 text-sm font-medium text-[#007562]">{member.title}</p>
-                                    <p className="text-sm text-gray-600">{member.bio}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
                     {/* Mission & Vision Section - ANIMATED */}
                     <section
                         ref={missionVisionRef}

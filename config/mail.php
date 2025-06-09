@@ -109,8 +109,11 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@taioak.co.ke'),
+        'name' => env('MAIL_FROM_NAME', 'Info Taioak'),
     ],
-
+    'to' => [
+        'address' => env('MAIL_TO_ADDRESS', 'taioaktraveltours2025@gmail.com'),
+        'name' => env('MAIL_TO_NAME', 'Taioak Travel Tours'),
+    ],
 ];

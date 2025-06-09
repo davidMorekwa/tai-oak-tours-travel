@@ -35,7 +35,7 @@ interface IndexPageProps extends SharedData {
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: route('dashboard') },
+    { title: 'Dashboard', href: route('admin.dashboard') },
     { title: 'Tours', href: route('admin.tours.index') },
 ];
 

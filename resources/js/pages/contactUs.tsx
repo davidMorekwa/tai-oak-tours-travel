@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react'; // Import useForm
 import { Mail, MapPin, MapPlus, Phone } from 'lucide-react'; // Icons for contact details
 // Import useInView and cn
 import { cn } from '@/lib/utils';
@@ -23,12 +23,28 @@ export default function ContactUs() {
     const { ref: formDetailsRef, inView: formDetailsInView } = useInView(animationOptions);
     const { ref: mapRef, inView: mapInView } = useInView(animationOptions);
 
-    // Placeholder for form submission handling (using Inertia's useForm later)
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // Use Inertia's useForm for the contact form
+    const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+    });
+
+    const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Add form submission logic here using Inertia useForm
-        console.log('Form submitted');
-        alert('Enquiry submitted! (Placeholder)');
+        post(route('contact.submit'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset(); // Clear form fields on success
+                alert('Thank you for your message! We will get back to you shortly.'); // Or use a more elegant notification
+            },
+            onError: (formErrors) => {
+                console.error('Contact form submission error:', formErrors);
+                // You can display errors more gracefully if needed
+                alert('There was an error submitting your message. Please check the form and try again.');
+            },
+        });
     };
 
     return (
@@ -110,26 +126,52 @@ export default function ContactUs() {
                             {/* Contact Form (Takes up 3/5 columns on large screens) */}
                             <div className="lg:col-span-3">
                                 <h2 className="mb-6 text-3xl font-bold text-gray-900">Send Us a Message</h2>
-                                <form onSubmit={handleSubmit} className="space-y-5">
+                                <form onSubmit={handleContactSubmit} className="space-y-5">
                                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                                         <div>
                                             <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700">
                                                 Full Name <span className="text-red-600">*</span>
                                             </label>
-                                            <Input id="name" type="text" placeholder="Your Name" required />
+                                            <Input
+                                                id="name"
+                                                type="text"
+                                                placeholder="Your Name"
+                                                value={data.name}
+                                                onChange={(e) => setData('name', e.target.value)}
+                                                required
+                                                disabled={processing}
+                                            />
+                                            {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
                                         </div>
                                         <div>
                                             <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
                                                 Email Address <span className="text-red-600">*</span>
                                             </label>
-                                            <Input id="email" type="email" placeholder="you@example.com" required />
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                placeholder="you@example.com"
+                                                value={data.email}
+                                                onChange={(e) => setData('email', e.target.value)}
+                                                required
+                                                disabled={processing}
+                                            />
+                                            {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
                                         </div>
                                     </div>
                                     <div>
                                         <label htmlFor="subject" className="mb-1 block text-sm font-medium text-gray-700">
                                             Subject
                                         </label>
-                                        <Input id="subject" type="text" placeholder="e.g., Enquiry about Maasai Mara Safari" />
+                                        <Input
+                                            id="subject"
+                                            type="text"
+                                            placeholder="e.g., Enquiry about Maasai Mara Safari"
+                                            value={data.subject}
+                                            onChange={(e) => setData('subject', e.target.value)}
+                                            disabled={processing}
+                                        />
+                                        {errors.subject && <p className="mt-1 text-xs text-red-600">{errors.subject}</p>}
                                     </div>
                                     <div>
                                         <label htmlFor="message" className="mb-1 block text-sm font-medium text-gray-700">
@@ -140,11 +182,15 @@ export default function ContactUs() {
                                             rows={6}
                                             className="border-input focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border bg-transparent p-3 text-base shadow-xs transition-[color,box-shadow] focus:outline-none focus-visible:ring-[3px] md:text-sm"
                                             placeholder="Tell us how we can help..."
+                                            value={data.message}
+                                            onChange={(e) => setData('message', e.target.value)}
                                             required
+                                            disabled={processing}
                                         ></textarea>
+                                        {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
                                     </div>
                                     <div className="text-right">
-                                        <Button type="submit" variant={'default'} size={'lg'}>
+                                        <Button type="submit" variant={'default'} size={'lg'} disabled={processing}>
                                             Send Message
                                         </Button>
                                     </div>

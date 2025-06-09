@@ -13,9 +13,10 @@ use Inertia\Inertia;
 
 class ToursController extends Controller
 {
-    public function welcome(){
-        $featured_packages = Tour::where('is_featured',1)->get();
-        return Inertia::render('welcome',['featured_packages' => $featured_packages]);
+    public function welcome()
+    {
+        $featured_packages = Tour::where('is_featured', 1)->get();
+        return Inertia::render('welcome', ['featured_packages' => $featured_packages]);
     }
     // Get all tours
     public function getAllTours(Request $request)
@@ -32,7 +33,7 @@ class ToursController extends Controller
                 // Search in title and description. Adjust columns as needed.
                 $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%");
+                        ->orWhere('description', 'like', "%{$search}%");
                     // Add more searchable fields if necessary
                 });
             })
@@ -50,7 +51,7 @@ class ToursController extends Controller
             // Example transformation for image URL:
             // Assuming $tour->image stores a path like 'assets/image.jpg' relative to 'public/storage/'
             // or 'storage/assets/image.jpg' relative to 'public/'
-            $imageUrl = $tour->image ? asset('storage/'.$tour->image) : asset('storage/image_assets/placeholder.jpg');
+            $imageUrl = $tour->image ? asset('storage/' . $tour->image) : asset('storage/image_assets/placeholder.jpg');
 
             return [
                 'id' => $tour->id,
@@ -60,7 +61,7 @@ class ToursController extends Controller
                 'description' => $tour->description,
                 'low_season_price' => (float) $tour->low_season_price, // Ensure numeric type
                 'high_season_price' => (float) $tour->high_season_price, // Ensure numeric type
-                'rating' => (float) $tour->rating, // Ensure numeric type
+                'rating' => $tour->averageRating !== null ? (float) $tour->averageRating : 4.5, // Ensure numeric type
                 // Assuming highlights are stored as a comma and double-space separated string
                 'highlights' => $tour->highlights ? array_map('trim', explode(',  ', $tour->highlights)) : [],
                 // Add any other fields your frontend 'TourPackage' type expects
@@ -87,18 +88,42 @@ class ToursController extends Controller
     }
 
     // get tour and itinerary
-    public function getTourAndItinerary(String $id){
-        $tour = Tour::find($id);
-        $tour->image = asset('storage/'.$tour->image);
+    public function getTourAndItinerary(string $id)
+    {
+        $tour = Tour::with([
+            'itineraries',
+            'locations',
+            'approvedReviews' => function ($query){
+                $query->orderBy('created_at', 'desc');
+            },
+            ])->findOrFail($id); 
+        // $tour = Tour::find($id);
+        $tour->image = asset('storage/' . $tour->image);
         $itinerary = $tour->itineraries()->orderBy('day_number')->get();
         $locations = $tour->locations()->get();
-        return Inertia::render('tourDetails', ['tour'=>$tour, 'itinerary'=>$itinerary, 'locations' => $locations]);
+        return Inertia::render('tourDetails', [
+            'tour' => $tour, 
+            'itinerary' => $itinerary, 
+            'locations' => $locations,
+            'reviews' => $tour->approvedReviews->map(function ($review) {
+                return [
+                    'id' => $review->id,
+                    'name' => $review->name,
+                    'rating' => $review->rating,
+                    'comment' => $review->comment,
+                    'created_at' => $review->created_at->format('M d, Y'),
+                ];
+            }),
+            'averageRating' => (float)$tour->averageRating,
+            'totalReviews' => (int)$tour->totalReviews,
+        ]);
     }
 
-    public function index(){
+    public function index()
+    {
         // Eager load locations if you plan to display more details from them.
         // For now, we'll rely on the 'country' field directly on the Tour model.
-        $toursData = Tour::orderBy('created_at', 'desc')->get()->map(function($tour) {
+        $toursData = Tour::orderBy('created_at', 'desc')->get()->map(function ($tour) {
             return [
                 'id' => $tour->id,
                 'title' => $tour->title,
@@ -115,11 +140,13 @@ class ToursController extends Controller
         return Inertia::render('admin/tours/Index', ['tours' => $toursData]);
     }
 
-    public function create(){
+    public function create()
+    {
         $locations = Location::all();
         return Inertia::render('admin/tours/Create', ['locations' => $locations]);
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -134,9 +161,18 @@ class ToursController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            // Store in 'public/tour_images' which links to 'storage/app/public/tour_images'
-            // The path stored in DB will be 'tour_images/filename.ext'
-            $imagePath = $request->file('image')->store('tour_images', 'public');
+            $destinationPath = public_path('storage/tour_images');
+            $file = $request->file('image');
+
+            // Optionally create the directory if it doesn't exist
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            // Generate a unique filename
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $file->move($destinationPath, $filename);
+            $imagePath = 'tour_images/' . $filename;
         }
 
         // Find the Location model instance by name
@@ -170,9 +206,12 @@ class ToursController extends Controller
     {
         // Eager load the currently associated location(s) to pre-select in the form
         // Also load itineraries, ordered by day_number
-        $tour->load(['locations', 'itineraries' => function ($query) {
-            $query->orderBy('day_number', 'asc');
-        }]);
+        $tour->load([
+            'locations',
+            'itineraries' => function ($query) {
+                $query->orderBy('day_number', 'asc');
+            }
+        ]);
         $locations = Location::orderBy('name')->get(['id', 'name', 'country']);
         // Prepare the tour data for the form, especially the selected location name
         $tourData = [
