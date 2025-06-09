@@ -61,7 +61,7 @@ class ToursController extends Controller
                 'description' => $tour->description,
                 'low_season_price' => (float) $tour->low_season_price, // Ensure numeric type
                 'high_season_price' => (float) $tour->high_season_price, // Ensure numeric type
-                'rating' => (float) $tour->rating, // Ensure numeric type
+                'rating' => $tour->averageRating !== null ? (float) $tour->averageRating : 4.5, // Ensure numeric type
                 // Assuming highlights are stored as a comma and double-space separated string
                 'highlights' => $tour->highlights ? array_map('trim', explode(',  ', $tour->highlights)) : [],
                 // Add any other fields your frontend 'TourPackage' type expects
