@@ -113,7 +113,7 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Info Taioak'),
     ],
     'to' => [
-        'address' => env('MAIL_TO_ADDRESS', 'davenyamongo16@gmail.com'),
+        'address' => env('MAIL_TO_ADDRESS', 'taioaktraveltours2025@gmail.com'),
         'name' => env('MAIL_TO_NAME', 'Taioak Travel Tours'),
     ],
 ];

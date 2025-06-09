@@ -8,12 +8,19 @@ import { DatePicker } from '@/components/ui/date-picker'; // Ensure DatePicker i
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label'; // Import Label
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea'; // Import Textarea
+import StarRating from '@/components/ui/star-rating'; // Import StarRating
 import { cn } from '@/lib/utils';
-import { TourItinerary, TourLocation, TourPackage, type SharedData } from '@/types'; // Removed router
+import { TourItinerary, TourLocation, TourPackage, Review, SharedData } from '@/types'; // Updated imports
 import { Head, Link, useForm, usePage } from '@inertiajs/react'; // Added useForm
-import { Check, Clock, DollarSign, MapPin, Star, Users, X } from 'lucide-react';
+import { Check, Clock, DollarSign, MapPin, MessageSquare, Star, User, Users, X, Send } from 'lucide-react'; // Added User, MessageSquare, Send
 import React, { useState } from 'react'; // Import useState
 import { useInView } from 'react-intersection-observer';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const inclusions = [
     'Full Board Accommodation while on Safari',
@@ -42,8 +49,9 @@ export default function TourDetails() {
     const logoUrl = '/storage/image_assets/logo.jpg'; // Ensure correct path
 
     const tour = props.tour as TourPackage;
-    const tourItinerary = props.itinerary as TourItinerary[];
+    const tourItinerary = props.itinerary as TourItinerary[] || [];
     const locations = props.locations as TourLocation[];
+    const reviews = props.reviews as Review[] || [];
 
     // Animation hooks - Added bookingRef
     const animationOptions = { triggerOnce: true, threshold: 0.1 };
@@ -53,6 +61,7 @@ export default function TourDetails() {
     const { ref: itineraryRef, inView: itineraryInView } = useInView(animationOptions);
     const { ref: inclusionsRef, inView: inclusionsInView } = useInView(animationOptions);
     const { ref: highlightsRef, inView: highlightsInView } = useInView(animationOptions);
+    const { ref: reviewsRef, inView: reviewsInView } = useInView(animationOptions); // New hook for reviews section
     const { ref: ctaRef, inView: ctaInView } = useInView(animationOptions);
     
     // Use Inertia's useForm for the Booking Request Widget
@@ -78,6 +87,32 @@ export default function TourDetails() {
                 console.error('Error submitting booking request:', errors);
                 const errorMessages = Object.values(errors).join('\n');
                 alert(`There was an error submitting your request:\n${errorMessages}\nPlease try again.`);
+            },
+        });
+    };
+
+    // Use Inertia's useForm for the Review Submission
+    const { data: reviewData, setData: setReviewData, post: postReview, processing: reviewProcessing, errors: reviewErrors, reset: resetReviewForm, recentlySuccessful: reviewRecentlySuccessful } = useForm({
+        name: '',
+        email: '', 
+        rating: 0,
+        comment: '',
+    });
+
+    const handleReviewSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (reviewData.rating === 0) {
+            alert("Please select a rating."); // Simple client-side validation for rating
+            return;
+        }
+        postReview(route('tours.reviews.store', { tour: tour.id }), { // Assumes tour.id is the identifier
+            preserveScroll: true,
+            onSuccess: () => {
+                resetReviewForm('rating', 'comment'); // Keep name/email if logged out user wants to review again (though unlikely for same tour)
+                // Optionally clear name/email if not logged in: resetReviewForm();
+            },
+            onError: (errors) => {
+                console.error('Error submitting review:', errors);
             },
         });
     };
@@ -296,7 +331,7 @@ export default function TourDetails() {
                         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                             <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">Daily Itinerary</h2>
                             <div className="space-y-8">
-                                {tourItinerary.map((day: TourItinerary) => (
+                                {tourItinerary && tourItinerary.length > 0 ? tourItinerary.map((day: TourItinerary) => (
                                     <div
                                         key={day.id}
                                         className="flex flex-col gap-2 rounded-lg border border-gray-300 bg-[#f5e7c5] p-6 shadow-sm md:flex-row md:gap-6"
@@ -311,7 +346,11 @@ export default function TourDetails() {
                                             <p className="text-gray-700">{day.description}</p>
                                         </div>
                                     </div>
-                                ))}
+                                )) : (
+                                    <p className="text-center text-gray-600">
+                                        Detailed daily itinerary is not available for this tour package yet. Please check back later or contact us for more information.
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </section>
@@ -375,7 +414,7 @@ export default function TourDetails() {
                         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                             <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">Tour Highlights</h2>
                             <div className="flex flex-wrap justify-center gap-3">
-                                {tour.highlights.split(',  ').map(
+                                {tour.highlights && tour.highlights.split(',  ').map(
                                     (
                                         highlight, // Assuming highlights is an array
                                     ) => (
@@ -394,13 +433,154 @@ export default function TourDetails() {
                         </div>
                     </section>
 
+                    {/* --- Reviews Section --- */}
+                    {/* Sequence 7: Cream */}
+                    <section
+                        ref={reviewsRef}
+                        className={cn(
+                            'w-full bg-[#f5e7c5] py-16', // Cream background
+                            'opacity-0 transition-opacity delay-600 duration-1000 ease-in-out', // Adjusted delay
+                            reviewsInView ? 'opacity-100' : '',
+                        )}
+                    >
+                        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                            <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">Customer Reviews</h2>
+                            {tour.total_reviews > 0 && props.average_rating !== null ? (
+                                <div className="mb-8 flex flex-col items-center text-center">
+                                    <StarRating value={tour.average_rating} size={32} readonly />
+                                    <p className="mt-2 text-lg text-gray-700">
+                                        {tour.average_rating.toFixed(1)} out of 5 stars
+                                    </p>
+                                    <p className="text-sm text-gray-600">Based on {tour.total_reviews} review{props.total_reviews !== 1 && 's'}</p>
+                                </div>
+                            ) : (
+                                <p className="mb-8 text-center text-gray-600">Be the first to review this tour!</p>
+                            )}
+
+                            
+
+                            {/* Review Submission Form */}
+                            <div className="rounded-lg bg-white p-6 shadow-md md:p-8">
+                                <h3 className="mb-6 text-2xl font-semibold text-gray-900">Leave a Review</h3>
+                                {reviewRecentlySuccessful && (
+                                    <div className="mb-4 rounded-md bg-green-100 p-4 text-sm text-green-700">
+                                        Thank you! Your review has been submitted successfully. It will be visible after approval.
+                                    </div>
+                                )}
+                                <form onSubmit={handleReviewSubmit} className="space-y-5">
+                                    {!props.auth.user && ( // Show Name and Email only if user is not logged in
+                                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                                            <div>
+                                                <Label htmlFor="reviewName" className="font-semibold">Your Name <span className="text-red-500">*</span></Label>
+                                                <Input
+                                                    id="reviewName"
+                                                    type="text"
+                                                    placeholder="John Doe"
+                                                    value={reviewData.name}
+                                                    onChange={(e) => setReviewData('name', e.target.value)}
+                                                    disabled={reviewProcessing}
+                                                    required
+                                                    className="bg-white"
+                                                />
+                                                {reviewErrors.name && <p className="mt-1 text-xs text-red-500">{reviewErrors.name}</p>}
+                                            </div>
+                                            <div>
+                                                <Label htmlFor="reviewEmail" className="font-semibold">Your Email <span className="text-red-500">*</span></Label>
+                                                <Input
+                                                    id="reviewEmail"
+                                                    type="email"
+                                                    placeholder="you@example.com"
+                                                    value={reviewData.email}
+                                                    onChange={(e) => setReviewData('email', e.target.value)}
+                                                    disabled={reviewProcessing}
+                                                    required
+                                                    className="bg-white"
+                                                />
+                                                {reviewErrors.email && <p className="mt-1 text-xs text-red-500">{reviewErrors.email}</p>}
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div>
+                                        <Label htmlFor="reviewRating" className="font-semibold">Your Rating <span className="text-red-500">*</span></Label>
+                                        <StarRating value={reviewData.rating} onChange={(rating) => setReviewData('rating', rating)} size={28} />
+                                        {reviewErrors.rating && <p className="mt-1 text-xs text-red-500">{reviewErrors.rating}</p>}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="reviewComment" className="font-semibold">Your Review</Label>
+                                        <Textarea
+                                            id="reviewComment"
+                                            rows={5}
+                                            placeholder="Share your experience with this tour..."
+                                            value={reviewData.comment}
+                                            onChange={(e) => setReviewData('comment', e.target.value)}
+                                            disabled={reviewProcessing}
+                                            className="bg-white"
+                                        />
+                                        {reviewErrors.comment && <p className="mt-1 text-xs text-red-500">{reviewErrors.comment}</p>}
+                                    </div>
+                                    <Button type="submit" size="lg" variant="default" className="w-full sm:w-auto" disabled={reviewProcessing}>
+                                        <Send className="mr-2 h-4 w-4" /> Submit Review
+                                    </Button>
+                                </form>
+                            </div>
+                            {/* Existing Reviews Carousel */}
+                            {reviews && reviews.length > 0 && (
+                            <Swiper
+                                modules={[Pagination, Navigation, Autoplay]}
+                                    spaceBetween={30}
+                                    slidesPerView={1}
+                                    pagination={{ clickable: true }}
+                                    loop={reviews.length > 1} // Loop if more than one review
+                                    autoplay={{
+                                        delay: 5000, // Adjusted delay
+                                        disableOnInteraction: true,
+                                    }}
+                                    className="mySwiper mt-12 rounded-lg pb-10" // Added margin-top, padding-bottom for pagination
+                                    breakpoints={{
+                                        // when window width is >= 768px (md)
+                                        768: {
+                                            slidesPerView: reviews.length > 1 ? 2 : 1, // Show 2 slides if more than 1 review, else 1
+                                            spaceBetween: 20,
+                                        },
+                                    }}
+                            >
+                                {reviews.map((review: Review) => (
+                                    <SwiperSlide key={review.id} className="p-1"> {/* Minimal padding for slide, card handles internal padding */}
+                                        <div className="flex h-full flex-col rounded-lg border border-gray-300 bg-white p-6 shadow-sm">
+                                            <div className="mb-2 flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    {/* Placeholder for avatar */}
+                                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#152253] text-white">
+                                                        <User size={20} />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-semibold text-gray-800">{review.name}</h4>
+                                                        <p className="text-xs text-gray-500">
+                                                            {new Date(review.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                                        </p>
+                                                        </div>
+                                                </div>
+                                                <StarRating value={review.rating} size={18} readonly />
+                                            </div>
+                                            <p className="flex-grow text-gray-700">{review.comment}</p> {/* flex-grow to help with consistent height */}
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                            )}
+                            {reviews.length === 0 && !reviewRecentlySuccessful && (
+                                <p className="mt-8 text-center text-gray-600">No reviews yet for this tour. Be the first to share your experience!</p>
+                            )}
+                        </div>
+                    </section>
+
                     {/* --- Optional: Keep simpler CTA or remove --- */}
                     {/* Sequence 7: Cream */}
                     <section
                         ref={ctaRef}
                         className={cn(
                             'w-full bg-[#f5e7c5] py-16 text-center', // Changed background to Cream
-                            'opacity-0 transition-opacity delay-600 duration-1000 ease-in-out', // Adjusted delay
+                            'opacity-0 transition-opacity delay-700 duration-1000 ease-in-out', // Adjusted delay
                             ctaInView ? 'opacity-100' : '',
                         )}
                     >

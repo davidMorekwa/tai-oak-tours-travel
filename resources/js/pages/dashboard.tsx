@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { type BreadcrumbItem, SharedData } from '@/types'; // Import SharedData
+import { Head, Link, usePage } from '@inertiajs/react'; // Import usePage
 import {
     Briefcase,
     CalendarClock,
@@ -13,20 +13,15 @@ import {
     ListChecks,
     PlaneTakeoff,
     BookOpenCheck,
+    MessageSquareWarning,
+    Badge, // Icon for pending reviews
 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: route('dashboard'),
+        href: route('admin.dashboard'), // Ensure route name matches
     },
-];
-
-// Dummy data - replace with actual data fetching later
-const stats = [
-    { title: 'Active Tours', value: '78', icon: PlaneTakeoff, description: 'Currently managed packages' },
-    { title: 'Active Bookings', value: '345', icon: BookOpenCheck, description: 'Confirmed reservations' },
-    { title: 'Upcoming Departures', value: '12', icon: CalendarClock, description: 'In the next 30 days' },
 ];
 
 const recentActivities = [
@@ -36,12 +31,24 @@ const recentActivities = [
 ];
 
 export default function Dashboard() {
+    const { props } = usePage<SharedData & { pendingReviewsCount?: number, activeToursCount?: number, activeBookingsCount?: number }>();
+    const pendingReviewsCount = props.pendingReviewsCount ?? 0;
+    // const activeToursCount = props.activeToursCount ?? 0; // Example if you pass this
+    // const activeBookingsCount = props.activeBookingsCount ?? 0; // Example if you pass this
+
+    // Stats data, now can include dynamic counts
+    const stats = [
+        { title: 'Active Tours', value: props.activeToursCount?.toString() || 'N/A', icon: PlaneTakeoff, description: 'Currently managed packages' },
+        { title: 'Pending Reviews', value: pendingReviewsCount.toString(), icon: MessageSquareWarning, description: 'Awaiting approval' },
+        { title: 'Active Bookings', value: props.activeBookingsCount?.toString() || 'N/A', icon: BookOpenCheck, description: 'Confirmed reservations' },
+        { title: 'Upcoming Departures', value: '12', icon: CalendarClock, description: 'In the next 30 days' }, // Example static
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 md:p-6">
                 <Heading title="Welcome Back!" description="Here's a quick overview of your travel agency." />
-
                 {/* Stats Cards */}
                 <div className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-4">
                     {stats.map((stat) => (
@@ -58,11 +65,16 @@ export default function Dashboard() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <Button asChild className="w-full justify-start">
-                                <Link href={route('admin.tours.index')}> {/* Assuming you have such a route */}
+                                <Link href={route('admin.tours.index')}>
                                     <PlusCircle className="mr-2 h-4 w-4" /> Manage Tour Packages
                                 </Link>
                             </Button>
-                            
+                            <Button asChild className="w-full justify-start" variant="outline">
+                                <Link href={route('admin.reviews.index')}>
+                                    <ListChecks className="mr-2 h-4 w-4" /> Manage Reviews
+                                    {pendingReviewsCount > 0 && <Badge className="ml-auto bg-destructive text-destructive-foreground">{pendingReviewsCount}</Badge>}
+                                </Link>
+                            </Button>
                         </CardContent>
                     </Card>
 

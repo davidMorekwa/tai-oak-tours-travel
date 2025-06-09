@@ -4,9 +4,9 @@
 
 -- Kenya
 INSERT INTO `locations` (`name`, `country`, `image`, `created_at`, `updated_at`) VALUES
-('Maasai Mara National Reserve', 'Kenya', 'storage/assets/locations/maasai_mara.jpg', NOW(), NOW()),
-('Amboseli National Park', 'Kenya', 'storage/assets/locations/amboseli.jpg', NOW(), NOW()),
-('Diani Beach', 'Kenya', 'storage/assets/locations/diani_beach.jpg', NOW(), NOW()),
+('Maasai Mara National Reserve', 'Kenya', 'assets/locations/maasai_mara.jpg', NOW(), NOW()),
+('Amboseli National Park', 'Kenya', 'assets/locations/amboseli.jpg', NOW(), NOW()),
+('Diani Beach', 'Kenya', 'assets/locations/diani_beach.jpg', NOW(), NOW()),
 ('Lake Nakuru National Park', 'Kenya', 'storage/assets/locations/lake_nakuru.jpg', NOW(), NOW()),
 ('Mount Kenya', 'Kenya', 'storage/assets/locations/mount_kenya.jpg', NOW(), NOW());
 
@@ -282,7 +282,7 @@ INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at
 (4, 3, NOW(), NOW()),
 (2, 3, NOW(), NOW());
 
--- 7 DAYS KENYA ADVENTURE SAFARI
+-- 10 DAYS KENYA-TANZANIA ADVENTURE SAFARI
 INSERT INTO `tours` (
     `title`,
     `duration_days`,
@@ -387,9 +387,9 @@ INSERT INTO `itineraries` (
     NOW()
 );
 INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
-(2, 5, NOW(), NOW()),
-(6, 5, NOW(), NOW()),
-(7, 5, NOW(), NOW());
+(2, 4, NOW(), NOW()),
+(6, 4, NOW(), NOW()),
+(7, 4, NOW(), NOW());
 
 -- 7 DAYS KENYA TANZANIA
 INSERT INTO `tours` (
@@ -425,49 +425,49 @@ INSERT INTO `itineraries` (
     `created_at`,
     `updated_at`
 ) VALUES (
-    5, -- tour_id
+    6, -- tour_id
     1, -- day_number
     'NAIROBI-AMBOSELI', -- title
     'You will be picked up by one of our representatives who will brief you on the tour and your expectations. You will then hit the road to the famous Amboseli National Park. In Amboseli National Park, you may have the chance to see the \'Big Five\' and a variety of other games with the snow-capped Mount Kilimanjaro, the highest in Africa, in the background. You will also be visiting the Maasai village to catch a glimpse of their way of life for 20 $. Dinner and your overnight stay will be at the Nyati tented camp on a full-board basis.\nAccommodation: Nyati camp Meals: Breakfast & Lunch', -- description
     NOW(),
     NOW()
 ), (
-    5, -- tour_id
+    6, -- tour_id
     2, -- day_number
     'FULL-DAY AMBOSELI NATIONAL PARK', -- title
     'Have an early morning breakfast with a packed lunch. A full-day game drive awaits you in the beautiful Amboseli! This park is the most visited park on Kenya safaris and one of Kenya’s oldest parks. Famously known for its wide range of elephants and splendid views of the tallest African mountain ‘’Mount Kilimanjaro”. Amboseli is one of the best parks in Kenya\'s "East African country’’ and the entire world where you can adventure a large number of free-roaming elephants in their peaceful natural environment and a rewardable scenic view of the ice-capped mountain. The birdlife in this park is vast and evident. This park is also a landmark of wildlife species most especially the high\nthe population of African elephants that roam around the park’s premises, lions, buffaloes, leopards, giraffes, wildebeests, gazelles, Topis, and hyenas just to mention but a few.\nAfter such a fun-filled day, you will head back to your camp to have your dinner and rest as you enjoy spending the evening at leisure.\nAccommodation: Nyati camp Meals: Breakfast & Lunch', -- description
     NOW(),
     NOW()
 ), (
-    5, -- tour_id
+    6, -- tour_id
     3, -- day_number
     'AMBOSELI NATIONAL PARK-NAMANGA BORDER-ARUSHA', -- title
     'Have breakfast then set out for the early game drive in the swampy park and enjoy a variety of herbivores wallowing in the muddy swamps like the hippos and the large elephants and their cubs and a variety of other wildlife then drive to the Namanga border where you will meet our driver who will transfer you to Arusha Hotel booked on bed and breakfast.\nAccommodation: Charity Hotel /Parachichi guest house /Meals: Breakfast & Lunch', -- description
     NOW(),
     NOW()
 ), (
-    5, -- tour_id
+    6, -- tour_id
     4, -- day_number
     'ARUSHA – SERENGETI NATIONAL PARK', -- title
     'Breakfast at your Arusha Hotel, meet our staff and driver-guide for briefing about the whole trip, and leave Arusha for a 6-hour drive to Serengeti National Park with lunch en route. Upon arrival at the main gate, have the registration done then with a game drive to the camp which is located at the Central Serengeti. Today you are scheduled for at least 3 3-hour game drive, then dinner will be served at Seronera Camp followed by overnight at the same camp.\nMeals: Breakfast, Lunch, Dinner', -- description
     NOW(),
     NOW()
 ), (
-    5, -- tour_id   
+    6, -- tour_id   
     5, -- day_number
     'SERENGETI NATIONAL PARK – NGORONGORO CRATER.', -- title
     'Early breakfast at the camp then leave with picnic lunches for at least a 6-hour Game drive within Serengeti National Park. Here you will track the wildebeest, Zebras, Giraffes, Lions, Lionesses, black rhinos, Cheetahs, Leopard, Hyenas, Bushbuck, lesser kudu, wild dog, Kongoni, impala, grant’s gazelle, black-backed jackal, Mongoose, Olive baboons, Vervet Monkeys among other animals are found here and you will be lucky to some of them. By noon leave the park with a stopover at Olduvai Gorge at an extra cost of USD $35 per person. By evening arrive at the conservancy area where you will have dinner and overnight at Simba camp.\nMeals: Breakfast, Lunch, Dinner', -- description
     NOW(),
     NOW()
 ), (
-    5, -- tour_id
+    6, -- tour_id
     6, -- day_number
     'NGORONGORO CRATER – ARUSHA TOWN', -- title
     'Breakfast at the camp, then leave for a game drive within the Ngorongoro crater where you will be able to descend with a game drive with the view of Common Lions, African Elephants, Black Rhino, blue wildebeest, Leopard, Cheetah, Hyena. Wild dogs, Grant’s Zebras, African buffalo, and Hippopotamus at the crater rim.\nHave a picnic lunch at the crater Rim then start ascending to the main gate, exit the crater after 6 hours, and drive to Arusha where you will be dropped at your Arusha Hotel.\nAccommodation: Charity Hotel /Parachichi guest house Meals: Breakfast & Lunch', -- description
     NOW(),
     NOW()
 ), (
-    5, -- tour_id
+    6, -- tour_id
     7, -- day_number
     'DEPARTURE.', -- title
     'After breakfast check out and either be transferred to Arusha airport or catch a shuttle bus back to Nairobi. If you return to Nairobi, you will meet our staff, share your experience, and be dropped off at your Nairobi Hotel or airport to catch a flight back home or to another destination.', -- description
@@ -475,11 +475,11 @@ INSERT INTO `itineraries` (
     NOW()
 );
 INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
-(1, 7, NOW(), NOW()),
-(4, 7, NOW(), NOW()),
-(2, 7, NOW(), NOW()),
-(6, 7, NOW(), NOW()),
-(7, 7, NOW(), NOW());
+(1, 6, NOW(), NOW()),
+(4, 6, NOW(), NOW()),
+(2, 6, NOW(), NOW()),
+(6, 6, NOW(), NOW()),
+(7, 6, NOW(), NOW());
 -- 8 DAYS KENYA ADVENTURE
 INSERT INTO `tours` (
     `title`,
@@ -514,56 +514,56 @@ INSERT INTO `itineraries` (
     `created_at`,
     `updated_at`
 ) VALUES (
-    6, -- tour_id
+    7, -- tour_id
     1, -- day_number
     'NAIROBI - MASAI MARA', -- title
     'You will be picked up from your hotel in Nairobi or Jomo Kenyatta International Airport and driven to the Masai Mara National Reserve. Upon arrival, you will have a hot lunch before embarking on an afternoon game drive. The Masai Mara, situated at an altitude of 1650 meters (5414 feet) and covering 1,510 square kilometers (almost 600 square miles), forms the northern extension of the Serengeti National Park in Tanzania. The name "Mara" means spotted or dappled in the Masai language, reflecting the mosaic of rolling grasslands, small brush-covered hills, riverine bush, and forests along the Mara River and its tributaries.\nOvernight Stay: Lenchada/Rhino Camp/Miti Mingi Tented Camp\nMeal Plan: Lunch & Dinner', -- description
     NOW(),
     NOW()
 ), (
-    6, -- tour_id
+    7, -- tour_id
     2, -- day_number
     'MASAI MARA FULL DAY', -- title
     'Enjoy a full-day game drive in the Masai Mara with a picnic lunch provided. The reserve is home to the “Big Five” (lion, leopard, African elephant, Cape buffalo, and black rhinoceros). Although the black rhino population was severely reduced by poaching in the 1970s and early 1980s, it has slowly increased to around 23 individuals by 1999. Large groups of hippopotamuses and crocodiles are found in the Mara and Talek rivers. You will also see leopards, hyenas, cheetahs, jackals, and bat-eared foxes. The Great Migration, involving approximately 1,300,000 wildebeests, 500,000 Thomson’s gazelles, 97,000 Topis, 18,000 elands, and 200,000 zebras, occurs from July to October.\nOvernight Stay: Lenchada /Rhino Camp/Miti Mingi/Mara Forest\nMeal Plan: Breakfast, Lunch & Dinner', -- description
     NOW(),
     NOW()
 ), (
-    6, -- tour_id
+    7, -- tour_id
     3, -- day_number
     'MASAI MARA FULL DAY', -- title
     'Enjoy a full-day game drive in the Masai Mara with a picnic lunch provided. The reserve is home to the “Big Five” (lion, leopard, African elephant, Cape buffalo, and black rhinoceros). Although the black rhino population was severely reduced by poaching in the 1970s and early 1980s, it has slowly increased to around 23 individuals by 1999. Large groups of hippopotamuses and crocodiles are found in the Mara and Talek rivers. You will also see leopards, hyenas, cheetahs, jackals, and bat-eared foxes. The Great Migration, involving approximately 1,300,000 wildebeests, 500,000 Thomson’s gazelles, 97,000 Topis, 18,000 elands, and 200,000 zebras, occurs from July to October.\nOvernight Stay: Lenchada /Rhino Camp/Miti Mingi/Mara Forest\nMeal Plan: Breakfast, Lunch & Dinner', -- description
     NOW(),
     NOW()
 ), (
-    6, -- tour_id
+    7, -- tour_id
     4, -- day_number
     'MASAI MARA - LAKE NAIVASHA', -- title
     'An early morning breakfast. You will have time to visit Masai Village which is an optional activity at USD 10 PP and then depart for Naivasha with lunch at Narok. After lunch you drive to Lake Naivasha arriving late in the afternoon for a walking safari at the famous Hells Gate with an optional bicycle ride @ $10 an optional boat trip @ $20 per person and where you will be able to see many species of birds and water animals e.g. hippos and have good pictures of them.\nOvernight Stay: Leisure Apex/Jazza Resort\nMeal Plan: Breakfast, Lunch & Dinner', -- description
     NOW(),
     NOW()
 ),(
-    6, -- tour_id
+    7, -- tour_id
     5, -- day_number
     'LAKE NAIVASHA-LAKE NAKURU NATIONAL PARK', -- title
     'Early morning breakfast and leave for Lake Nakuru National Park arriving with game drive en-route to find leopards which are frequently sighted in Lake Nakuru National Park. Have picnic lunch, then proceed with the game drive, take a further drive to seek out the two species of rhino found in the black – Black and White Rhino. Lake Nakuru National Park is also known for many species of birds and thousands of flamingos.\nOvernight Stay: Legacy Hotel/Buraha Resort/Hill court resort\nMeal Plan: Breakfast, Lunch & Dinner', -- description
     NOW(),
     NOW()
 ),(
-    6, -- tour_id
+    7, -- tour_id
     6, -- day_number
     'LAKE NAKURU NATIONAL PARK-AMBOSELI', -- title
     'After breakfast, you leave for Amboseli National Park with a hot lunch at Nairobi. Arriving at your camp late evening. Amboseli is famous for its scenery with a backdrop of snow-capped Mount Kilimanjaro, which dominates the landscape, and open plains. Dinner and overnight at your camp.\nMeals and overnight at Nyati Camp Amboseli\nMeal Plan: Breakfast, Lunch & Dinner', -- description
     NOW(),
     NOW()
 ), (
-    6, -- tour_id
+    7, -- tour_id
     7, -- day_number
     'AMBOSELI NATIONAL PARK FULL DAY', -- title
     'Early morning breakfast after which leave with packed lunch for the full day game drive where you will spend time in the park in search of its popular residents like the well-known predators and their opponents like the zebra, Giraffe, Hippo and big Elephants with a view of Mt Kilimanjaro.\nMeals and overnight at Nyati Camp Amboseli\nMeal Plan: Breakfast, Lunch & Dinner', -- description
     NOW(),
     NOW()
 ),(
-    6, -- tour_id
+    7, -- tour_id
     8, -- day_number
     'AMBOSELI NATIONAL PARK –NAIROBI', -- title
     'Early morning breakfast then check out of the camp, proceed for morning game drive thereafter drive back to Nairobi with picnic lunch en-route to Nairobi. In Nairobi, you will be dropped at your hotel or at the airport for your return flight.', -- description
@@ -571,9 +571,9 @@ INSERT INTO `itineraries` (
     NOW()
 );
 INSERT INTO `location_tour` (`location_id`, `tour_id`, `created_at`, `updated_at`) VALUES
-(1, 6, NOW(), NOW()),
-(4, 6, NOW(), NOW()),
-(2, 6, NOW(), NOW());
+(1, 7, NOW(), NOW()),
+(4, 7, NOW(), NOW()),
+(2, 7, NOW(), NOW());
 
 -- 10 DAYS KENYA-TANZANIA SAFARI
 INSERT INTO `tours` (

@@ -39,7 +39,7 @@ export default function EditItinerary() {
     }, [flash]);
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: route('dashboard') },
+        { title: 'Dashboard', href: route('admin.dashboard') },
         { title: 'Tours', href: route('admin.tours.index') },
         { title: `Edit: ${tour.title}`, href: route('admin.tours.edit', tour.id) },
         { title: `Edit Itinerary Day ${itinerary.day_number}`, href: route('admin.tours.itineraries.edit', { tour: tour.id, itinerary: itinerary.id }) },

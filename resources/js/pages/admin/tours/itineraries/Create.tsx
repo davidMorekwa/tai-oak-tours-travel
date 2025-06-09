@@ -40,7 +40,7 @@ export default function CreateItinerary() {
     }, [flash]);
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: route('dashboard') },
+        { title: 'Dashboard', href: route('admin.dashboard') },
         { title: 'Tours', href: route('admin.tours.index') },
         { title: `Edit: ${tour.title}`, href: route('admin.tours.edit', tour.id) },
         { title: 'Add Itinerary Item', href: route('admin.tours.itineraries.create', tour.id) },

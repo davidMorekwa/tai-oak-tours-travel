@@ -90,11 +90,33 @@ class ToursController extends Controller
     // get tour and itinerary
     public function getTourAndItinerary(string $id)
     {
-        $tour = Tour::find($id);
+        $tour = Tour::with([
+            'itineraries',
+            'locations',
+            'approvedReviews' => function ($query){
+                $query->orderBy('created_at', 'desc');
+            },
+            ])->findOrFail($id); 
+        // $tour = Tour::find($id);
         $tour->image = asset('storage/' . $tour->image);
         $itinerary = $tour->itineraries()->orderBy('day_number')->get();
         $locations = $tour->locations()->get();
-        return Inertia::render('tourDetails', ['tour' => $tour, 'itinerary' => $itinerary, 'locations' => $locations]);
+        return Inertia::render('tourDetails', [
+            'tour' => $tour, 
+            'itinerary' => $itinerary, 
+            'locations' => $locations,
+            'reviews' => $tour->approvedReviews->map(function ($review) {
+                return [
+                    'id' => $review->id,
+                    'name' => $review->name,
+                    'rating' => $review->rating,
+                    'comment' => $review->comment,
+                    'created_at' => $review->created_at->format('M d, Y'),
+                ];
+            }),
+            'averageRating' => (float)$tour->averageRating,
+            'totalReviews' => (int)$tour->totalReviews,
+        ]);
     }
 
     public function index()
